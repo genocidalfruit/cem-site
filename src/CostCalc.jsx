@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Chart from 'chart.js/auto';
-import Header from './Header.jsx'
-import Footer from './Footer.jsx';
+import Header from './Header';
+import Footer from './Footer';
 
 import { Printer, Share2, FileText } from 'lucide-react';
 
@@ -184,8 +184,16 @@ const CostCalc = () => {
           },
           options: {
             responsive: true,
+            maintainAspectRatio: false,
             plugins: {
-              legend: { position: 'top' },
+              legend: { 
+                position: 'bottom',
+                labels: {
+                  boxWidth: 12,
+                  padding: 10,
+                  fontSize: 10
+                }
+              },
             },
           },
         });
@@ -224,6 +232,7 @@ const CostCalc = () => {
           options: {
             indexAxis: 'y',
             responsive: true,
+            maintainAspectRatio: false,
             plugins: {
               legend: { display: false },
               tooltip: {
@@ -247,10 +256,19 @@ const CostCalc = () => {
                 title: {
                   display: true,
                   text: 'Overall duration in days (Total ~247 Days)',
+                  font: {
+                    size: window.innerWidth < 768 ? 10 : 12
+                  }
                 },
               },
               y: {
                 stacked: true,
+                ticks: {
+                  display: window.innerWidth >= 768,
+                  font: {
+                    size: window.innerWidth < 768 ? 8 : 10
+                  }
+                }
               },
             },
           },
@@ -260,7 +278,7 @@ const CostCalc = () => {
               const ctx = chart.canvas.getContext('2d');
               ctx.save();
               ctx.globalCompositeOperation = 'destination-over';
-              ctx.fillStyle = '#f4f4f4'; // light background
+              ctx.fillStyle = '#f4f4f4';
               ctx.fillRect(0, 0, chart.width, chart.height);
               ctx.restore();
             }
@@ -273,158 +291,190 @@ const CostCalc = () => {
   return (
     <div className="bg-white min-h-screen font-sans text-gray-800 flex flex-col">
       <Header />
-      <div className='flex-grow m-8 mt-23 border border-gray-300/50 rounded-md bg-gray-100/20 drop-shadow-xs'>
-      <h1 className="text-center text-4xl tracking-wide pt-7 pb-10 text-gray-800 font-extrabold">Construction Cost Estimator</h1>
-      <div className="flex flex-wrap justify-center gap-6 mb-10 px-6">
-        <div>
-          <label className="block mb-1 font-semibold text-gray-700">State</label>
-          <select
-            className="w-52 p-2 border border-gray-300 bg-white text-gray-800 rounded-md focus:ring-2 focus:ring-yellow-400"
-            value={state}
-            onChange={handleStateChange}
-          >
-            <option value="">Select State</option>
-            {Object.keys(cityMap).map((state) => (
-              <option key={state} value={state}>{state}</option>
-            ))}
-          </select>
+      
+      <div className='flex-grow m-5 sm:m-4 md:m-8 mt-25 sm:mt-24 md:mt-28 border border-gray-300 rounded-md bg-gray-100 drop-shadow-xs'>
+        <h1 className="text-center text-2xl sm:text-3xl md:text-4xl tracking-wide pt-4 sm:pt-6 md:pt-7 pb-6 sm:pb-8 md:pb-10 text-gray-800 font-extrabold px-4">
+          Construction Cost Estimator
+        </h1>
+        
+        {/* Input Form */}
+        <div className="flex flex-col sm:flex-row sm:flex-wrap justify-center gap-4 sm:gap-6 mb-6 sm:mb-10 px-4 sm:px-6">
+          <div className="w-full sm:w-auto">
+            <label className="block mb-1 font-semibold text-gray-700">State</label>
+            <select
+              className="w-full sm:w-52 p-2 border border-gray-300 bg-white text-gray-800 rounded-md focus:ring-2 focus:ring-yellow-400"
+              value={state}
+              onChange={handleStateChange}
+            >
+              <option value="">Select State</option>
+              {Object.keys(cityMap).map((state) => (
+                <option key={state} value={state}>{state}</option>
+              ))}
+            </select>
+          </div>
+
+          <div className="w-full sm:w-auto">
+            <label className="block mb-1 font-semibold text-gray-700">City</label>
+            <select
+              className="w-full sm:w-52 p-2 border border-gray-300 bg-white text-gray-800 rounded-md focus:ring-2 focus:ring-yellow-400"
+              value={city}
+              onChange={(e) => setCity(e.target.value)}
+            >
+              <option value="">Select City</option>
+              {(cityMap[state] || []).map((city) => (
+                <option key={city} value={city}>{city}</option>
+              ))}
+            </select>
+          </div>
+
+          <div className="w-full sm:w-auto">
+            <label className="block mb-1 font-semibold text-gray-700">Area</label>
+            <input
+              type="number"
+              className="w-full sm:w-52 p-2 border border-gray-300 bg-white text-gray-800 rounded-md focus:ring-2 focus:ring-yellow-400"
+              value={area}
+              onChange={(e) => setArea(Number(e.target.value))}
+            />
+          </div>
+
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6 mt-2 sm:mt-7 text-sm text-gray-700 w-full sm:w-auto">
+            <div className="flex gap-6">
+              <label><input type="radio" name="areaUnit" value="sqft" defaultChecked className="mr-1" /> Sq. Feet</label>
+              <label><input type="radio" name="areaUnit" value="sqm" className="mr-1" /> Sq. Meter</label>
+            </div>
+            
+            <button
+              className="bg-yellow-500 hover:bg-yellow-400 text-white px-5 py-2 rounded-lg shadow-sm transition-colors duration-200 font-semibold w-full sm:w-auto"
+              onClick={calculateCost}
+            >
+              Next →
+            </button>
+          </div>
         </div>
 
-        <div>
-          <label className="block mb-1 font-semibold text-gray-700">City</label>
-          <select
-            className="w-52 p-2 border border-gray-300 bg-white text-gray-800 rounded-md focus:ring-2 focus:ring-yellow-400"
-            value={city}
-            onChange={(e) => setCity(e.target.value)}
-          >
-            <option value="">Select City</option>
-            {(cityMap[state] || []).map((city) => (
-              <option key={city} value={city}>{city}</option>
-            ))}
-          </select>
-        </div>
-
-        <div>
-          <label className="block mb-1 font-semibold text-gray-700">Area</label>
-          <input
-            type="number"
-            className="w-52 p-2 border border-gray-300 bg-white text-gray-800 rounded-md focus:ring-2 focus:ring-yellow-400"
-            value={area}
-            onChange={(e) => setArea(Number(e.target.value))}
-          />
-        </div>
-
-        <div className="flex items-center gap-6 mt-7 text-sm text-gray-700">
-          <label><input type="radio" name="areaUnit" value="sqft" defaultChecked className="mr-1" /> Sq. Feet</label>
-          <label><input type="radio" name="areaUnit" value="sqm" className="mr-1" /> Sq. Meter</label>
-        </div>
-
-        <div>
-          <button
-            className="bg-yellow-500 hover:bg-yellow-400 text-white px-5 py-2 mt-6 rounded-lg shadow-sm transition-colors duration-200 font-semibold"
-            onClick={calculateCost}
-          >
-            Next →
-          </button>
-        </div>
-      </div>
-
-      {!resultsVisible && (
-          <div className="flex flex-col items-center justify-center py-20 text-gray-400">
-            <FileText className="w-10 h-10 mb-4" />
-            <p className="text-lg font-medium">Enter details to generate report</p>
+        {!resultsVisible && (
+          <div className="flex flex-col items-center justify-center py-10 sm:py-20 text-gray-400">
+            <FileText className="w-8 h-8 sm:w-10 sm:h-10 mb-4" />
+            <p className="text-base sm:text-lg font-medium px-4 text-center">Enter details to generate report</p>
           </div>
         )}
 
-      {resultsVisible && (
-        <div>
-          <div className="bg-gray-100 shadow-lg rounded-xl pt-5 max-w-4xl mx-auto border border-gray-300 px-6 pb-6">
-            <h2 className="text-2xl font-semibold mb-5 text-center text-gray-600 uppercase tracking-wide">Total Estimated Cost (INR)</h2>
-            <div className="mb-10 flex justify-center">
-              <div className='w-3/5 h-3/5'>
-                <canvas ref={doughnutChartRef}></canvas>
+        {resultsVisible && (
+          <div className="px-2 sm:px-4 md:px-6">
+            <div className="bg-gray-100 shadow-lg rounded-xl pt-5 max-w-6xl mx-auto border border-gray-300 px-3 sm:px-4 md:px-6 pb-6">
+              
+              {/* Cost Chart */}
+              <h2 className="text-lg sm:text-xl md:text-2xl font-semibold mb-5 text-center text-gray-600 uppercase tracking-wide px-2">
+                Total Estimated Cost (INR)
+              </h2>
+              <div className="mb-6 sm:mb-10 flex justify-center">
+                <div className='w-full max-w-lg h-64 sm:h-80 md:h-96'>
+                  <canvas ref={doughnutChartRef}></canvas>
+                </div>
               </div>
-            </div>
 
-            <h2 className="text-2xl font-semibold mb-5 text-center text-gray-600 uppercase tracking-wide">Timeline Tracking</h2>
-            <div className="flex justify-center">
-              <canvas ref={barChartRef} className="w-3/4 h-60"></canvas>
-            </div>
+              {/* Timeline Chart */}
+              <h2 className="text-lg sm:text-xl md:text-2xl font-semibold mb-5 text-center text-gray-600 uppercase tracking-wide px-2">
+                Timeline Tracking
+              </h2>
+              <div className="flex justify-center mb-6 sm:mb-10">
+                <div className="w-full max-w-4xl h-64 sm:h-80 md:h-96">
+                  <canvas ref={barChartRef}></canvas>
+                </div>
+              </div>
 
-            <h2 className="text-2xl font-semibold mt-10 mb-5 text-center text-gray-600 uppercase tracking-wide">Resource Allocation</h2>
-            <table className="w-full border-separate border border-gray-300 text-left text-sm text-gray-800 bg-white shadow-md p-1 rounded-md">
-              <thead className="bg-gray-200 text-gray-800 rounded-md">
-                <tr>
-                  <th className="border border-gray-300 p-2">Resource</th>
-                  <th className="border border-gray-300 p-2">Quantity</th>
-                  <th className="border border-gray-300 p-2">Quality</th>
-                  <th className="border border-gray-300 p-2">Amount</th>
-                </tr>
-              </thead>
-              <tbody>
-                {baseResources.map(({ resource, quantity, baseAmount }, index) => {
-                  const quality = resourceQualities[resource] || 'Basic';
-                  const amount = getAmount(baseAmount, quality);
-                  return (
-                    <tr
-                      key={index}
-                      className="border-b border-gray-300 hover:bg-gray-100 transition-colors"
-                    >
-                      <td className="border border-gray-300 p-2">{resourceIcons[resource]}{resource}</td>
-                      <td className="border border-gray-300 p-2">{quantity}</td>
-                      <td className="border border-gray-300 p-2">
-                        {['Basic', 'Medium', 'Premium'].map((q) => (
-                          <label key={q} className="mr-3 text-gray-800 cursor-pointer">
-                            <input
-                              type="radio"
-                              name={`${resource}-quality`}
-                              value={q}
-                              checked={quality === q}
-                              onChange={() => handleQualityChange(resource, q)}
-                              className="mr-1"
-                            /> {q}
-                          </label>
-                        ))}
-                      </td>
-                      <td className="border border-gray-300 p-2">₹{amount.toLocaleString()}</td>
+              {/* Resource Allocation Table */}
+              <h2 className="text-lg sm:text-xl md:text-2xl font-semibold mt-6 sm:mt-10 mb-5 text-center text-gray-600 uppercase tracking-wide px-2">
+                Resource Allocation
+              </h2>
+              
+              {/* Mobile-optimized table */}
+              <div className="overflow-x-auto">
+                <table className="w-full border-separate border border-gray-300 text-left text-xs sm:text-sm text-gray-800 bg-white shadow-md rounded-md min-w-full">
+                  <thead className="bg-gray-200 text-gray-800 rounded-md">
+                    <tr>
+                      <th className="border border-gray-300 p-2 min-w-32">Resource</th>
+                      <th className="border border-gray-300 p-2 min-w-24">Quantity</th>
+                      <th className="border border-gray-300 p-2 min-w-48">Quality</th>
+                      <th className="border border-gray-300 p-2 min-w-24">Amount</th>
                     </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+                  </thead>
+                  <tbody>
+                    {baseResources.map(({ resource, quantity, baseAmount }, index) => {
+                      const quality = resourceQualities[resource] || 'Basic';
+                      const amount = getAmount(baseAmount, quality);
+                      return (
+                        <tr
+                          key={index}
+                          className="border-b border-gray-300 hover:bg-gray-100 transition-colors"
+                        >
+                          <td className="border border-gray-300 p-2">
+                            <div className="flex items-center flex-wrap">
+                              <span className="sm:hidden">{resourceIcons[resource]}</span>
+                              <span className="hidden sm:inline">{resourceIcons[resource]}</span>
+                              <span className="text-xs sm:text-sm">{resource}</span>
+                            </div>
+                          </td>
+                          <td className="border border-gray-300 p-2 text-xs sm:text-sm">{quantity}</td>
+                          <td className="border border-gray-300 p-2">
+                            <div className="flex flex-col sm:flex-row gap-1 sm:gap-3">
+                              {['Basic', 'Medium', 'Premium'].map((q) => (
+                                <label key={q} className="text-xs sm:text-sm text-gray-800 cursor-pointer flex items-center">
+                                  <input
+                                    type="radio"
+                                    name={`${resource}-quality`}
+                                    value={q}
+                                    checked={quality === q}
+                                    onChange={() => handleQualityChange(resource, q)}
+                                    className="mr-1"
+                                  /> 
+                                  <span>{q}</span>
+                                </label>
+                              ))}
+                            </div>
+                          </td>
+                          <td className="border border-gray-300 p-2 text-xs sm:text-sm font-medium">₹{amount.toLocaleString()}</td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
 
-            <div className="flex justify-center space-x-4 mt-6 pb-5 print:hidden">
-              <button
-                onClick={() => window.print()}
-                className="bg-yellow-500 hover:bg-yellow-400 text-white px-4 py-2 rounded-md font-semibold flex items-center gap-2"
-              >
-                <Printer className="w-4 h-4" /> Print
-              </button>
-              <button 
-                onClick={toggleShareModal}
-                className="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-md font-semibold flex items-center gap-2"
-              >
-                <Share2 className="w-4 h-4" /> Share
-              </button>
+              {/* Action Buttons */}
+              <div className="flex flex-col sm:flex-row justify-center space-y-2 sm:space-y-0 sm:space-x-4 mt-6 pb-5 print:hidden">
+                <button
+                  onClick={() => window.print()}
+                  className="bg-yellow-500 hover:bg-yellow-400 text-white px-4 py-2 rounded-md font-semibold flex items-center justify-center gap-2 w-full sm:w-auto"
+                >
+                  <Printer className="w-4 h-4" /> Print
+                </button>
+                <button 
+                  onClick={toggleShareModal}
+                  className="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-md font-semibold flex items-center justify-center gap-2 w-full sm:w-auto"
+                >
+                  <Share2 className="w-4 h-4" /> Share
+                </button>
+              </div>
 
               {/* Share Modal */}
               {showShareModal && (
-                <div className="fixed inset-0 flex items-center justify-center z-50">
+                <div className="fixed inset-0 flex items-center justify-center z-50 p-4">
                   <div className="absolute inset-0 bg-black opacity-50" onClick={toggleShareModal}></div>
-                  <div className="bg-white rounded-lg p-6 z-10 shadow-xl">
-                    <h3 className="text-xl font-semibold mb-4 text-center">Share Your Estimate</h3>
-                    <div className="flex justify-center space-x-4">
+                  <div className="bg-white rounded-lg p-4 sm:p-6 z-10 shadow-xl w-full max-w-sm">
+                    <h3 className="text-lg sm:text-xl font-semibold mb-4 text-center">Share Your Estimate</h3>
+                    <div className="flex justify-center space-x-3 sm:space-x-4">
                       <FacebookShareButton url={window.location.href}>
-                        <FacebookIcon size={40} round />
+                        <FacebookIcon size={32} round />
                       </FacebookShareButton>
                       <TwitterShareButton url={window.location.href}>
-                        <TwitterIcon size={40} round />
+                        <TwitterIcon size={32} round />
                       </TwitterShareButton>
                       <WhatsappShareButton url={window.location.href}>
-                        <WhatsappIcon size={40} round />
+                        <WhatsappIcon size={32} round />
                       </WhatsappShareButton>
                       <LinkedinShareButton url={window.location.href}>
-                        <LinkedinIcon size={40} round />
+                        <LinkedinIcon size={32} round />
                       </LinkedinShareButton>
                     </div>
                     <button 
@@ -437,15 +487,16 @@ const CostCalc = () => {
                 </div>
               )}
             </div>
-          </div>
 
-          <div className='flex justify-center mt-6 p-6 bg-yellow-100 font-semibold text-yellow-800 gap-20 shadow-inner'>
-            <div>Cost per sqfeet: ₹{costPerSqft.toLocaleString()}</div>
-            <div>Total Amount: ₹{totalAmount.toLocaleString()}</div>
+            {/* Summary Footer */}
+            <div className='flex flex-col sm:flex-row justify-center items-center mt-4 sm:mt-6 p-4 sm:p-6 bg-yellow-100 font-semibold text-yellow-800 gap-4 sm:gap-20 shadow-inner rounded-lg'>
+              <div className="text-center sm:text-left">Cost per sqfeet: ₹{costPerSqft.toLocaleString()}</div>
+              <div className="text-center sm:text-left">Total Amount: ₹{totalAmount.toLocaleString()}</div>
+            </div>
           </div>
-        </div>
-      )}
+        )}
       </div>
+      
       <Footer />
     </div>
   );
