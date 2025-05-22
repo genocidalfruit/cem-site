@@ -183,7 +183,10 @@ const EMICalculator = () => {
           >
             <Share2 className="w-4 h-4" /> Share
           </button>
-          {showShareModal && (
+          
+          </div>
+      </div>
+      {showShareModal && (
             <div className="fixed inset-0 flex items-center justify-center z-50">
               <div className="absolute inset-0 bg-black opacity-50" onClick={toggleShareModal}></div>
               <div className="bg-white rounded-lg p-6 z-10 shadow-xl">
@@ -211,8 +214,6 @@ const EMICalculator = () => {
               </div>
             </div>
           )}
-          </div>
-      </div>
       <Footer />
     </div>
   );
