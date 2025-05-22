@@ -63,7 +63,7 @@ const InfoVideos = () => {
   return (
 <div className="min-h-screen flex flex-col bg-gray-50">
 <Header />
-<main className="flex-grow container border border-gray-300/50 rounded-md drop-shadow-xs px-3 sm:px-4 py-6 md:py-8 mt-20 md:mt-25 mx-2 sm:mx-4 md:mx-5 mb-6">
+<main className="flex-grow container border border-gray-300/50 rounded-md drop-shadow-xs px-3 sm:px-4 py-6 md:py-8 mt-25 md:mt-25 mx-0 sm:mx-2 md:mx-auto mb-6">
         {/* Myth-Busting Videos Section */}
 <section className="mb-8 md:mb-12">
 <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-4 md:mb-6 pb-2 border-b-2 border-yellow-500">

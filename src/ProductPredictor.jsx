@@ -94,7 +94,7 @@ const ProductPredictor = () => {
   return (
     <div className="flex flex-col min-h-screen text-gray-800 bg-gray-50">
       <Header />
-      <div className="flex-grow mx-4 md:mx-15 p-4 md:p-10 mt-20 md:mt-24 border border-gray-300/50 rounded-md bg-gray-100/20 drop-shadow-xs mb-10">
+      <div className="flex-grow mx-4 md:mx-15 p-4 md:p-10 mt-25 md:mt-24 border border-gray-300/50 rounded-md bg-gray-100/20 drop-shadow-xs mb-10">
         <h1 className="text-3xl md:text-5xl font-extrabold text-center mb-6 md:mb-10 mt-2 md:mt-4">Product Predictor</h1>
  
         <div className="mb-6 md:mb-8">

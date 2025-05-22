@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import {
   Calculator,
   Banknote,
@@ -28,7 +29,7 @@ const FrontPage = () => {
       icon: <Calculator className="w-6 h-6 text-yellow-600 mb-2" />
     },
     {
-      title: 'Smart Material Selector',
+      title: 'Product Predictor',
       description: 'Find the best building materials based on your requirements.',
       link: '/product-predictor',
       icon: <SlidersHorizontal className="w-6 h-6 text-yellow-600 mb-2" />
@@ -125,17 +126,31 @@ const FrontPage = () => {
       <div className="border border-gray-100/20 p-4 sm:p-10 mx-auto rounded-xl bg-gray-100 drop-shadow-xl mb-10 flex-grow max-w-7xl w-full">
         <section className="px-2 sm:px-6 flex flex-wrap justify-center gap-4 sm:gap-8">
           {features.map((item, idx) => (
-            <button
-              key={idx}
-              onClick={item.isChatbot ? handleChatbotClick : undefined}
-              className="bg-white text-left p-4 sm:p-6 rounded-xl shadow hover:shadow-lg transition block hover:bg-yellow-50 w-[95%] sm:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.5rem)] max-w-sm"
-            >
-              <div className="flex flex-col">
-                {item.icon}
-                <h3 className="text-xl font-bold text-yellow-600 mb-2">{item.title}</h3>
-                <p className="text-gray-700 text-sm">{item.description}</p>
-              </div>
-            </button>
+            item.isChatbot ? (
+              <button
+                key={idx}
+                onClick={handleChatbotClick}
+                className="bg-white text-left p-4 sm:p-6 rounded-xl shadow hover:shadow-lg transition block hover:bg-yellow-50 w-[95%] sm:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.5rem)] max-w-sm"
+              >
+                <div className="flex flex-col">
+                  {item.icon}
+                  <h3 className="text-xl font-bold text-yellow-600 mb-2">{item.title}</h3>
+                  <p className="text-gray-700 text-sm">{item.description}</p>
+                </div>
+              </button>
+            ) : (
+              <Link
+                key={idx}
+                to={item.link}
+                className="bg-white text-left p-4 sm:p-6 rounded-xl shadow hover:shadow-lg transition block hover:bg-yellow-50 w-[95%] sm:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.5rem)] max-w-sm"
+              >
+                <div className="flex flex-col">
+                  {item.icon}
+                  <h3 className="text-xl font-bold text-yellow-600 mb-2">{item.title}</h3>
+                  <p className="text-gray-700 text-sm">{item.description}</p>
+                </div>
+              </Link>
+            )
           ))}
         </section>
       </div>

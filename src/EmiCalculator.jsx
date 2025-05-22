@@ -111,7 +111,7 @@ const EMICalculator = () => {
   return (
     <div className="flex flex-col min-h-screen text-gray-800 bg-gray-50">
       <Header />
-      <div className="flex-grow w-full max-w-7xl mx-auto px-4 sm:px-6 py-6 mt-20 md:mt-24 border border-gray-300/50 rounded-md bg-gray-100/20 drop-shadow-xs mb-10">
+      <div className="flex-grow w-full max-w-7xl mx-auto px-4 sm:px-6 py-6 mt-25 md:mt-24 border border-gray-300/50 rounded-md bg-gray-100/20 drop-shadow-xs mb-10">
         <h1 className="text-3xl md:text-5xl font-extrabold text-center mb-8 md:mb-13 mt-2 md:mt-4">EMI Calculator</h1>
  
         {/* Sliders */}
