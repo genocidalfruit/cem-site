@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
-import oneBg from './assets/one-bg.jpg';
-import twoBg from './assets/two-bg.jpg'
-import threeBg from './assets/three-bg.jpg'
+import oneBg from './assets/Simplify Construction Planning.png';
+import twoBg from './assets/Plan Out EMIs.png'
+import threeBg from './assets/Find Stores Near You.png'
 
 const carouselItems = [
   {
