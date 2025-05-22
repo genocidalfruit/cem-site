@@ -18,28 +18,10 @@ import Footer from './Footer.jsx';
 const FrontPage = () => {
   const features = [
     { 
-      title: 'Material Estimator', 
-      description: 'Get a cost breakdown by resource and quality.', 
-      link: '/material-estimator',
-      icon: <Hammer className="w-6 h-6 text-yellow-600 mb-2" />
-    },
-    { 
-      title: 'Construction Timeline', 
-      description: 'Plan out each phase with our smart tracker.', 
-      link: '/construction-timeline',
-      icon: <CalendarCheck className="w-6 h-6 text-yellow-600 mb-2" />
-    },
-    { 
       title: 'Cost Calculator', 
       description: 'Estimate total project costs based on inputs.', 
       link: '/cost-calculator',
       icon: <Calculator className="w-6 h-6 text-yellow-600 mb-2" />
-    },
-    { 
-      title: 'Store Locator', 
-      description: 'Find nearby material suppliers and vendors.', 
-      link: '/store-locator',
-      icon: <Store className="w-6 h-6 text-yellow-600 mb-2" />
     },
     { 
       title: 'Product Predictor', 
@@ -52,12 +34,6 @@ const FrontPage = () => {
       description: 'Plan your loan repayments with flexible EMIs.', 
       link: '/emi-calculator',
       icon: <Banknote className="w-6 h-6 text-yellow-600 mb-2" />
-    },
-    { 
-      title: 'Tile Calculator', 
-      description: 'Accurately calculate tile needs for your space.', 
-      link: '/tile-calculator',
-      icon: <Square className="w-6 h-6 text-yellow-600 mb-2" />
     },
     { 
       title: 'Informational Videos', 
@@ -88,18 +64,22 @@ const FrontPage = () => {
       <h2 className="text-3xl mt-8 font-bold text-center text-gray-800 mb-3">OUR FEATURES</h2>
       
       <div className="border border-gray-100/20 p-10 mx-auto rounded-xl bg-gray-100 drop-shadow-xl mb-10 flex-grow max-w-7xl w-full">
-        <section className="px-6 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {features.map((item, idx) => (
-            <Link to={item.link} key={idx} className="bg-white p-6 rounded-xl shadow hover:shadow-lg transition block hover:bg-yellow-50">
-              <div className="flex flex-col">
-                {item.icon}
-                <h3 className="text-xl font-bold text-yellow-600 mb-2">{item.title}</h3>
-                <p className="text-gray-700 text-sm">{item.description}</p>
-              </div>
-            </Link>
-          ))}
-        </section>
-      </div>
+  <section className="px-6 flex flex-wrap justify-center gap-8">
+    {features.map((item, idx) => (
+      <Link
+        to={item.link}
+        key={idx}
+        className="bg-white p-6 rounded-xl shadow hover:shadow-lg transition block hover:bg-yellow-50 w-full sm:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.5rem)] max-w-sm"
+      >
+        <div className="flex flex-col">
+          {item.icon}
+          <h3 className="text-xl font-bold text-yellow-600 mb-2">{item.title}</h3>
+          <p className="text-gray-700 text-sm">{item.description}</p>
+        </div>
+      </Link>
+    ))}
+  </section>
+</div>
 
       <Footer />
     </div>
