@@ -1,0 +1,101 @@
+import React, { useState } from 'react';
+import Header from './Header';
+import Footer from './Footer';
+
+const stateCityMap = {
+  Karnataka: ['Kundapura', 'Bangalore', 'Mysore'],
+  Maharashtra: ['Mumbai', 'Pune', 'Nagpur'],
+  Gujarat: ['Ahmedabad', 'Surat', 'Vadodara']
+};
+
+const StoreLocator = () => {
+  const [state, setState] = useState('');
+  const [city, setCity] = useState('');
+  const [supplier, setSupplier] = useState(null);
+
+  const handleSubmit = () => {
+    if (state && city) {
+      // Mocked data
+      setSupplier({
+        name: 'SKS TRADERS',
+        contact: '9448348540 / 9448348540',
+        address: 'KANCHIKAN,II 72-2,BIJOOR POST,KUNDAPURA TQ,UDUPI 576224',
+        pincode: '576244'
+      });
+    }
+  };
+
+  return (
+    <div className="min-h-screen flex flex-col font-sans text-gray-800 bg-white">
+      
+      <Header />
+      <div className='flex-grow'>
+      {/* Main Content */}
+      <main className="pt-32 px-6 max-w-5xl mx-auto text-center">
+        <h1 className="text-4xl font-extrabold mb-10">Building Material Suppliers Near Me</h1>
+
+        <div className="flex flex-wrap justify-center gap-6 mb-10">
+          <select
+            value={state}
+            onChange={(e) => {
+              setState(e.target.value);
+              setCity('');
+              setSupplier(null);
+            }}
+            className="w-60 p-2 border border-gray-300 rounded-md shadow-sm text-gray-800 font-bold uppercase bg-gray-100"
+          >
+            <option value="">Select State</option>
+            {Object.keys(stateCityMap).map((state) => (
+              <option key={state} value={state}>
+                {state}
+              </option>
+            ))}
+          </select>
+
+          <select
+            value={city}
+            onChange={(e) => setCity(e.target.value)}
+            className="w-60 p-2 border border-gray-300 rounded-md shadow-sm text-gray-800 font-bold uppercase bg-gray-100"
+          >
+            <option value="">Select City</option>
+            {(stateCityMap[state] || []).map((city) => (
+              <option key={city} value={city}>
+                {city}
+              </option>
+            ))}
+          </select>
+
+          <button
+            onClick={handleSubmit}
+            className="bg-yellow-400 hover:bg-yellow-300 px-6 py-2 font-bold rounded-md text-black shadow"
+          >
+            Submit
+          </button>
+        </div>
+
+        {supplier && (
+          <div className="max-w-xl mx-auto border border-gray-200 rounded-lg overflow-hidden shadow bg-gray-50">
+            <div className="bg-yellow-400 text-black font-bold py-3 text-center text-lg">
+              {supplier.name}
+            </div>
+            <div className="p-5 text-left text-gray-800 space-y-2">
+              <p>
+                <span className="font-semibold">Contact No</span>: {supplier.contact}
+              </p>
+              <p>
+                <span className="font-semibold">Address</span>: {supplier.address}
+              </p>
+              <p>
+                <span className="font-semibold">Pincode</span>: {supplier.pincode}
+              </p>
+            </div>
+          </div>
+        )}
+      </main>
+        </div>
+      <Footer />
+    </div>
+  );
+};
+
+export default StoreLocator;

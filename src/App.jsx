@@ -1,0 +1,23 @@
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
+import CostCalc from './CostCalc.jsx'
+import FrontPage from './FrontPage.jsx'
+import StoreLocator from './StoreLocator.jsx'
+import EMICalculator from './EmiCalculator.jsx'
+import TileCalculator from './TileCalculator.jsx'
+import Footer from './Footer.jsx'
+
+function App() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<FrontPage />} />
+        <Route path="/cost-calculator" element={<CostCalc />} />
+        <Route path="/store-locator" element={<StoreLocator />} />
+        <Route path="/emi-calculator" element={<EMICalculator />} />
+        <Route path="/tile-calculator" element={<TileCalculator />} />
+      </Routes>
+    </Router>
+  )
+}
+
+export default App
