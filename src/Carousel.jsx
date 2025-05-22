@@ -2,9 +2,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import oneBg from './assets/Simplify Construction Planning.png';
-import twoBg from './assets/Plan Out EMIs.png'
-import threeBg from './assets/Find Stores Near You.png'
-
+import twoBg from './assets/Plan Out EMIs.png';
+import threeBg from './assets/Find Stores Near You.png';
+ 
 const carouselItems = [
   {
     heading: 'Simplify Construction Planning',
@@ -28,37 +28,37 @@ const carouselItems = [
     backgroundImage: threeBg,
   }
 ];
-
+ 
 const Carousel = () => {
   const [current, setCurrent] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
   const intervalRef = useRef(null);
-
+ 
   const handleNext = () => {
     setCurrent((prev) => (prev + 1) % carouselItems.length);
   };
-
+ 
   const handlePrev = () => {
     setCurrent((prev) => (prev - 1 + carouselItems.length) % carouselItems.length);
   };
-
+ 
   useEffect(() => {
     const preloadImage = (src) => {
-        const img = new Image();
-        img.src = src;
+      const img = new Image();
+      img.src = src;
     };
-
+ 
     // Preload next and previous images
     const nextIndex = (current + 1) % carouselItems.length;
     const prevIndex = (current - 1 + carouselItems.length) % carouselItems.length;
-
+ 
     preloadImage(carouselItems[nextIndex].backgroundImage);
     preloadImage(carouselItems[prevIndex].backgroundImage);
-    }, [current]);
-
+  }, [current]);
+ 
   return (
     <section
-      className="relative mt-24 px-4 py-16 sm:px-6 text-center rounded-lg mx-8 bg-center bg-no-repeat max-h-800 inset-shadow-sm inset-shadow-gray-600/50"
+      className="relative mt-20 md:mt-24 px-2 sm:px-4 py-8 inset-shadow-sm inset-shadow-gray-600/50 sm:py-16 text-center rounded-lg mx-2 sm:mx-4 md:mx-8 bg-center bg-no-repeat"
       style={{
         backgroundColor: "#DFDBE5",
         backgroundImage: `url("data:image/svg+xml,%3Csvg width='42' height='44' viewBox='0 0 42 44' xmlns='http://www.w3.org/2000/svg'%3E%3Cg id='Page-1' fill='none' fill-rule='evenodd'%3E%3Cg id='brick-wall' fill='%239C92AC' fill-opacity='0.4'%3E%3Cpath d='M0 0h42v44H0V0zm1 1h40v20H1V1zM0 23h20v20H0V23zm22 0h20v20H22V23z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
@@ -68,18 +68,17 @@ const Carousel = () => {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div className="max-w-7xl mx-auto flex items-center justify-between gap-2 px-2 sm:px-4">
-        
-        {/* Left Arrow */}
+      <div className="max-w-7xl mx-auto flex items-center justify-between gap-1 sm:gap-2 px-1 sm:px-2 md:px-4">
+        {/* Left Arrow - Hidden on mobile, visible on tablet and up */}
         <button
           onClick={handlePrev}
-          className="flex-shrink-0 bg-white/80 hover:bg-yellow-100 transition p-2 rounded-full shadow mr-5"
+          className="hidden sm:flex flex-shrink-0 bg-white/80 hover:bg-yellow-100 transition p-1 sm:p-2 rounded-full shadow mr-2 sm:mr-5"
         >
-          <ChevronLeft className="text-gray-700 w-5 h-5 sm:w-6 sm:h-6" />
+          <ChevronLeft className="text-gray-700 w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
         </button>
-
+ 
         {/* Carousel Card */}
-        <div className="w-full h-[340px] sm:h-[400px] md:h-[440px] flex items-center justify-center drop-shadow-xl">
+        <div className="w-full h-[280px] sm:h-[340px] md:h-[400px] lg:h-[440px] flex items-center justify-center drop-shadow-lg sm:drop-shadow-xl">
           <AnimatePresence mode="wait">
             <motion.div
               key={current}
@@ -87,39 +86,51 @@ const Carousel = () => {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.4, ease: 'easeInOut' }}
-              className="relative w-full h-full bg-cover bg-center bg-no-repeat rounded-xl px-4 py-6 sm:px-8 sm:py-14 md:px-20 md:py-16 shadow-xl flex flex-col justify-center items-center text-center drop-shadow-xl"
+              className="relative w-full h-full bg-cover bg-center bg-no-repeat rounded-lg sm:rounded-xl px-4 py-6 sm:px-6 sm:py-10 md:px-8 md:py-14 lg:px-20 lg:py-16 shadow-lg sm:shadow-xl flex flex-col justify-center items-center text-center"
               style={{
                 backgroundImage: `url(${carouselItems[current].backgroundImage})`,
                 backgroundBlendMode: 'overlay',
                 backgroundColor: 'rgba(255,255,255,0.6)',
               }}
             >
-              <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-gray-800 mb-3 tracking-tight">
+              <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold sm:font-extrabold text-gray-800 mb-2 sm:mb-3 tracking-tight">
                 {carouselItems[current].heading}
               </h1>
-              <p className="text-xl sm:text-base text-gray-800 mb-6 max-w-md sm:max-w-xl mx-auto">
+              <p className="text-sm sm:text-base md:text-lg text-gray-800 mb-4 sm:mb-6 max-w-xs sm:max-w-md md:max-w-xl mx-auto">
                 {carouselItems[current].description}
               </p>
               <a
                 href={carouselItems[current].link}
-                className="bg-yellow-500 hover:bg-yellow-400 text-white px-5 py-2 rounded-lg text-sm sm:text-base font-semibold transition"
+                className="bg-yellow-500 hover:bg-yellow-400 text-white px-4 py-2 sm:px-5 sm:py-2 rounded-md sm:rounded-lg text-xs sm:text-sm md:text-base font-semibold transition"
               >
                 {carouselItems[current].cta}
               </a>
             </motion.div>
           </AnimatePresence>
         </div>
-
-        {/* Right Arrow */}
+ 
+        {/* Right Arrow - Hidden on mobile, visible on tablet and up */}
         <button
           onClick={handleNext}
-          className="flex-shrink-0 bg-white/80 hover:bg-yellow-100 transition p-2 rounded-full shadow ml-5"
+          className="hidden sm:flex flex-shrink-0 bg-white/80 hover:bg-yellow-100 transition p-1 sm:p-2 rounded-full shadow ml-2 sm:ml-5"
         >
-          <ChevronRight className="text-gray-700 w-5 h-5 sm:w-6 sm:h-6" />
+          <ChevronRight className="text-gray-700 w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
         </button>
+      </div>
+ 
+      {/* Mobile Navigation Dots */}
+      <div className="sm:hidden flex justify-center mt-4 space-x-2">
+        {carouselItems.map((_, index) => (
+          <button
+            key={index}
+            onClick={() => setCurrent(index)}
+            className={`w-2 h-2 rounded-full ${current === index ? 'bg-gray-800' : 'bg-gray-400'}`}
+            aria-label={`Go to slide ${index + 1}`}
+          />
+        ))}
       </div>
     </section>
   );
 };
-
+ 
 export default Carousel;
