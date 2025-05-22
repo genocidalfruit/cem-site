@@ -1,3 +1,4 @@
+// Improved EMI Calculator UI (sleek modern look, no animations)
 import React, { useState, useEffect, useRef } from 'react';
 import Chart from 'chart.js/auto';
 import Header from './Header';
@@ -14,28 +15,25 @@ import {
   LinkedinIcon
 } from 'react-share';
 
-import { Printer, Share2 } from 'lucide-react';
+import { Printer, Share2, IndianRupee, Percent, CalendarDays } from 'lucide-react';
 
 const EMICalculator = () => {
-  const [loanAmount, setLoanAmount] = useState(1500000); // in ₹
-  const [interestRate, setInterestRate] = useState(10); // %
-  const [loanTenure, setLoanTenure] = useState(10); // years
+  const [loanAmount, setLoanAmount] = useState(1500000);
+  const [interestRate, setInterestRate] = useState(10);
+  const [loanTenure, setLoanTenure] = useState(10);
 
   const pieChartRef = useRef(null);
   const [emi, setEmi] = useState(0);
   const [totalInterest, setTotalInterest] = useState(0);
   const [totalPayment, setTotalPayment] = useState(0);
-
   const [showShareModal, setShowShareModal] = useState(false);
-  const toggleShareModal = () => {
-    setShowShareModal(!showShareModal);
-  };
+
+  const toggleShareModal = () => setShowShareModal(!showShareModal);
 
   useEffect(() => {
     const monthlyRate = interestRate / 12 / 100;
     const months = loanTenure * 12;
-    const emiCalc =
-      (loanAmount * monthlyRate * Math.pow(1 + monthlyRate, months)) /
+    const emiCalc = (loanAmount * monthlyRate * Math.pow(1 + monthlyRate, months)) /
       (Math.pow(1 + monthlyRate, months) - 1);
 
     const total = emiCalc * months;
@@ -65,12 +63,11 @@ const EMICalculator = () => {
           ],
         },
         options: {
+          responsive: false,
           plugins: {
             legend: {
-              position: 'bottom',
-              labels: {
-                color: '#fff',
-              },
+              position: 'right',
+              labels: { color: '#000' },
             },
           },
         },
@@ -98,154 +95,123 @@ const EMICalculator = () => {
         paidPercent: Math.min(((paidToDate / totalPayment) * 100).toFixed(2), 100),
       });
     }
-
     return rows;
   };
 
   return (
-    <div className="min-h-screen flex flex-col font-sans text-gray-800 bg-white">
+    <div className="flex flex-col min-h-screen text-gray-800 bg-gray-50">
       <Header />
-      <div className="flex-grow bg-gray-100/20 border border-gray-300/50 rounded-md mx-25 my-8 py-10 mt-24 drop-shadow-xs">
-      <h1 className="text-center text-4xl tracking-wide pb-10 text-gray-800 font-extrabold">EMI Calculator</h1>
-        <div className="max-w-6xl mx-auto bg-gray-100 p-8 rounded-md shadow-md">
-          <h2 className="text-2xl font-bold mb-6">EMI Details</h2>
+      <div className="flex-grow w-full max-w-7xl mx-auto px-6 py-6 mt-24 border border-gray-300/50 rounded-md bg-gray-100/20 drop-shadow-xs mb-10">
+        <h1 className="text-5xl font-extrabold text-center mb-15">EMI Calculator</h1>
 
-          <div className="grid md:grid-cols-3 gap-6">
-            <div className="space-y-2">
-              <label className="font-semibold">Home Loan Amount (₹) in Lakhs</label>
-              <input
-                type="range"
-                min={1}
-                max={100}
-                value={loanAmount / 100000}
-                onChange={(e) => setLoanAmount(Number(e.target.value) * 100000)}
-                className="w-full accent-yellow-400"
-              />
-              <div className="bg-white p-2 rounded text-center font-semibold">
-                ₹{(loanAmount / 100000).toLocaleString()} Lakh
-              </div>
+        {/* Sliders */}
+        <section className="grid md:grid-cols-3 gap-6 mb-10">
+          {[
+            { icon: <IndianRupee className="inline w-5 h-5 mr-1" />, label: 'Loan Amount (₹ Lakhs)', value: loanAmount / 100000, min: 1, max: 100, onChange: val => setLoanAmount(val * 100000), suffix: 'Lakh' },
+            { icon: <Percent className="inline w-5 h-5 mr-1" />, label: 'Interest Rate (%)', value: interestRate, min: 1, max: 20, step: 0.1, onChange: setInterestRate, suffix: '%' },
+            { icon: <CalendarDays className="inline w-5 h-5 mr-1" />, label: 'Loan Tenure (Years)', value: loanTenure, min: 1, max: 30, onChange: setLoanTenure, suffix: 'Years' }
+          ].map(({ icon, label, value, min, max, step = 1, onChange, suffix }, i) => (
+            <div key={i} className="bg-white p-4 rounded-xl shadow-md">
+              <label className="block mb-2 font-semibold text-gray-700">
+                {icon} {label}
+              </label>
+              <input type="range" min={min} max={max} step={step} value={value} onChange={e => onChange(Number(e.target.value))} className="w-full accent-yellow-400" />
+              <div className="mt-2 text-center text-lg font-semibold">{value} {suffix}</div>
             </div>
+          ))}
+        </section>
 
-            <div className="space-y-2">
-              <label className="font-semibold">Interest Rate (%)</label>
-              <input
-                type="range"
-                min={1}
-                max={20}
-                step={0.1}
-                value={interestRate}
-                onChange={(e) => setInterestRate(Number(e.target.value))}
-                className="w-full accent-yellow-400"
-              />
-              <div className="bg-white p-2 rounded text-center font-semibold">{interestRate}%</div>
-            </div>
-
-            <div className="space-y-2">
-              <label className="font-semibold">Loan Tenure (Years)</label>
-              <input
-                type="range"
-                min={1}
-                max={30}
-                value={loanTenure}
-                onChange={(e) => setLoanTenure(Number(e.target.value))}
-                className="w-full accent-yellow-400"
-              />
-              <div className="bg-white p-2 rounded text-center font-semibold">{loanTenure} Years</div>
-            </div>
+        {/* EMI Summary */}
+        <section className="grid md:grid-cols-2 gap-6 mb-10">
+          <div className="bg-white p-6 rounded-xl shadow-md">
+            <h2 className="text-2xl font-extrabold mb-4 text-gray-800 tracking-tight">Loan EMI</h2>
+            <p className="text-4xl font-bold mb-3 text-yellow-600">₹{emi.toLocaleString()}</p>
+            <p className="text-lg text-gray-700 mb-1">Total Interest: <span className="font-medium text-blue-600">₹{totalInterest.toLocaleString()}</span></p>
+            <p className="text-lg text-gray-700">Total Payment: <span className="font-medium text-green-600">₹{totalPayment.toLocaleString()}</span></p>
           </div>
-        </div>
-
-        {/* Result Chart */}
-        <div className="bg-gray-800 text-white mt-8 p-8 rounded-md max-w-6xl mx-auto">
-          <div className="grid md:grid-cols-2 gap-6">
-            <div>
-              <h3 className="text-xl font-bold mb-4">Loan EMI</h3>
-              <p className="text-2xl font-semibold mb-2">₹{emi.toLocaleString()}</p>
-              <p className="mb-2">Total Interest Payable: ₹{totalInterest.toLocaleString()}</p>
-              <p>Total Payment: ₹{totalPayment.toLocaleString()}</p>
-            </div>
-            <div>
-              <canvas ref={pieChartRef} />
-            </div>
+          <div className="bg-white p-6 rounded-xl shadow-md flex justify-center">
+            <canvas ref={pieChartRef} width={500} height={400} />
           </div>
-        </div>
+        </section>
 
-        {/* EMI Table */}
-        <div className="bg-white max-w-6xl mx-auto mt-10">
-          <h3 className="text-lg font-semibold bg-gray-800 text-white p-4 rounded-t">
-            Schedule showing EMI payments starting from
-          </h3>
-          <table className="w-full text-sm border-collapse">
-            <thead className="bg-gray-100 text-gray-700 font-semibold">
-              <tr>
-                <th className="p-2 border">Year</th>
-                <th className="p-2 border">Principal Table (A)</th>
-                <th className="p-2 border">Interest Table (B)</th>
-                <th className="p-2 border">Total Payment (A+B)</th>
-                <th className="p-2 border">Balance</th>
-                <th className="p-2 border">Loan Paid To Date</th>
-              </tr>
-            </thead>
-            <tbody>
-              {getEMITable().map((row, idx) => (
-                <tr key={idx} className="text-center">
-                  <td className="border p-2">[+] {row.year}</td>
-                  <td className="border p-2">₹{row.principal.toLocaleString()}</td>
-                  <td className="border p-2">₹{row.interest.toLocaleString()}</td>
-                  <td className="border p-2">₹{row.total.toLocaleString()}</td>
-                  <td className="border p-2">₹{row.balance.toLocaleString()}</td>
-                  <td className="border p-2">{row.paidPercent}%</td>
+        {/* Table */}
+        <section className="bg-white rounded-xl shadow-md overflow-hidden">
+          <h3 className="text-lg font-semibold bg-gray-300 p-4">EMI Schedule</h3>
+          <div className="overflow-x-auto">
+            <table className="min-w-full text-sm text-gray-800">
+              <thead className="bg-gray-200 text-gray-600 uppercase text-xs tracking-wide">
+                <tr>
+                  <th className="p-3 text-left">Year</th>
+                  <th className="p-3 text-right">Principal</th>
+                  <th className="p-3 text-right">Interest</th>
+                  <th className="p-3 text-right">Total</th>
+                  <th className="p-3 text-right">Balance</th>
+                  <th className="p-3 text-right">Paid</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-
-          {/* Print and Share Buttons */}
-          <div className="flex justify-center gap-4 py-6 print:hidden">
-            <button
-              onClick={() => window.print()}
-              className="bg-yellow-500 hover:bg-yellow-400 text-white px-4 py-2 rounded-md font-semibold flex items-center gap-2"
-            >
-              <Printer className="w-4 h-4" /> Print
-            </button>
-            <button 
-              onClick={toggleShareModal}
-              className="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-md font-semibold flex items-center gap-2"
-            >
-              <Share2 className="w-4 h-4" /> Share
-            </button>
-
-            {/* Share Modal */}
-            {showShareModal && (
-              <div className="fixed inset-0 flex items-center justify-center z-50">
-                <div className="absolute inset-0 bg-black opacity-50" onClick={toggleShareModal}></div>
-                <div className="bg-white rounded-lg p-6 z-10 shadow-xl">
-                  <h3 className="text-xl font-semibold mb-4 text-center">Share Your Estimate</h3>
-                  <div className="flex justify-center space-x-4">
-                    <FacebookShareButton url={window.location.href}>
-                      <FacebookIcon size={40} round />
-                    </FacebookShareButton>
-                    <TwitterShareButton url={window.location.href}>
-                      <TwitterIcon size={40} round />
-                    </TwitterShareButton>
-                    <WhatsappShareButton url={window.location.href}>
-                      <WhatsappIcon size={40} round />
-                    </WhatsappShareButton>
-                    <LinkedinShareButton url={window.location.href}>
-                      <LinkedinIcon size={40} round />
-                    </LinkedinShareButton>
-                  </div>
-                  <button 
-                    onClick={toggleShareModal}
-                    className="mt-6 bg-gray-200 hover:bg-gray-300 text-gray-800 py-2 px-4 rounded-md w-full font-semibold"
+              </thead>
+              <tbody>
+                {getEMITable().map((row, idx) => (
+                  <tr
+                    key={idx}
+                    className={`transition-colors duration-200 ${
+                      idx % 2 === 0 ? 'bg-white' : 'bg-gray-50'
+                    } hover:bg-yellow-50`}
                   >
-                    Close
-                  </button>
-                </div>
-              </div>
-            )}
+                    <td className="p-3 font-medium">{row.year}</td>
+                    <td className="p-3 text-right">₹{row.principal.toLocaleString()}</td>
+                    <td className="p-3 text-right">₹{row.interest.toLocaleString()}</td>
+                    <td className="p-3 text-right font-semibold">₹{row.total.toLocaleString()}</td>
+                    <td className="p-3 text-right text-gray-600">₹{row.balance.toLocaleString()}</td>
+                    <td className="p-3 text-right text-blue-600">{row.paidPercent}%</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
-        </div>
+        </section>
+
+        <div className="flex justify-center space-x-4 mt-6 pb-5 print:hidden">
+          <button
+            onClick={() => window.print()}
+            className="bg-yellow-500 hover:bg-yellow-400 text-white px-4 py-2 rounded-md font-semibold flex items-center gap-2"
+          >
+            <Printer className="w-4 h-4" /> Print
+          </button>
+          <button 
+            onClick={toggleShareModal}
+            className="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-md font-semibold flex items-center gap-2"
+          >
+            <Share2 className="w-4 h-4" /> Share
+          </button>
+          {showShareModal && (
+            <div className="fixed inset-0 flex items-center justify-center z-50">
+              <div className="absolute inset-0 bg-black opacity-50" onClick={toggleShareModal}></div>
+              <div className="bg-white rounded-lg p-6 z-10 shadow-xl">
+                <h3 className="text-xl font-semibold mb-4 text-center">Share Your Estimate</h3>
+                <div className="flex justify-center space-x-4">
+                  <FacebookShareButton url={window.location.href}>
+                    <FacebookIcon size={40} round />
+                  </FacebookShareButton>
+                  <TwitterShareButton url={window.location.href}>
+                    <TwitterIcon size={40} round />
+                  </TwitterShareButton>
+                  <WhatsappShareButton url={window.location.href}>
+                    <WhatsappIcon size={40} round />
+                  </WhatsappShareButton>
+                  <LinkedinShareButton url={window.location.href}>
+                    <LinkedinIcon size={40} round />
+                  </LinkedinShareButton>
+                </div>
+                <button 
+                  onClick={toggleShareModal}
+                  className="mt-6 bg-gray-200 hover:bg-gray-300 text-gray-800 py-2 px-4 rounded-md w-full font-semibold"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          )}
+          </div>
       </div>
       <Footer />
     </div>

@@ -3,7 +3,7 @@ import Chart from 'chart.js/auto';
 import Header from './Header.jsx'
 import Footer from './Footer.jsx';
 
-import { Printer, Share2 } from 'lucide-react';
+import { Printer, Share2, FileText } from 'lucide-react';
 
 import {
   FacebookShareButton,
@@ -277,7 +277,7 @@ const CostCalc = () => {
       <h1 className="text-center text-4xl tracking-wide pt-7 pb-10 text-gray-800 font-extrabold">Construction Cost Estimator</h1>
       <div className="flex flex-wrap justify-center gap-6 mb-10 px-6">
         <div>
-          <label className="block mb-1 font-medium text-gray-700">Select State</label>
+          <label className="block mb-1 font-semibold text-gray-700">State</label>
           <select
             className="w-52 p-2 border border-gray-300 bg-white text-gray-800 rounded-md focus:ring-2 focus:ring-yellow-400"
             value={state}
@@ -291,7 +291,7 @@ const CostCalc = () => {
         </div>
 
         <div>
-          <label className="block mb-1 font-medium text-gray-700">Select City</label>
+          <label className="block mb-1 font-semibold text-gray-700">City</label>
           <select
             className="w-52 p-2 border border-gray-300 bg-white text-gray-800 rounded-md focus:ring-2 focus:ring-yellow-400"
             value={city}
@@ -305,7 +305,7 @@ const CostCalc = () => {
         </div>
 
         <div>
-          <label className="block mb-1 font-medium text-gray-700">Area</label>
+          <label className="block mb-1 font-semibold text-gray-700">Area</label>
           <input
             type="number"
             className="w-52 p-2 border border-gray-300 bg-white text-gray-800 rounded-md focus:ring-2 focus:ring-yellow-400"
@@ -328,6 +328,13 @@ const CostCalc = () => {
           </button>
         </div>
       </div>
+
+      {!resultsVisible && (
+          <div className="flex flex-col items-center justify-center py-20 text-gray-400">
+            <FileText className="w-10 h-10 mb-4" />
+            <p className="text-lg font-medium">Enter details to generate report</p>
+          </div>
+        )}
 
       {resultsVisible && (
         <div>
