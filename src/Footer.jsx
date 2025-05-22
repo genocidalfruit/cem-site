@@ -29,8 +29,10 @@ const Footer = () => {
       </div>
 
       {/* Copyright */}
-      <div className="text-center text-xs text-gray-500 mt-4">
-        &copy; {new Date().getFullYear()} [COMPANY] All rights reserved.
+      <div className="text-center text-md text-gray-500 mt-4 font-bold">
+        &copy; {new Date().getFullYear()} innogen
+        <span className="text-red-600">X </span>
+        All rights reserved.
       </div>
     </footer>
   );

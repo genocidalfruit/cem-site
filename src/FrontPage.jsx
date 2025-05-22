@@ -1,14 +1,10 @@
 import { Link } from 'react-router-dom';
 import { 
-  Hammer, 
-  CalendarCheck,
   Calculator, 
-  Store, 
-  Sparkles, 
   Banknote, 
-  Square, 
   Video, 
-  Bot 
+  Bot,
+  SlidersHorizontal
 } from 'lucide-react'; // Lucide icons
 
 import Carousel from './Carousel.jsx';
@@ -23,11 +19,11 @@ const FrontPage = () => {
       link: '/cost-calculator',
       icon: <Calculator className="w-6 h-6 text-yellow-600 mb-2" />
     },
-    { 
-      title: 'Product Predictor', 
-      description: 'Get AI-powered suggestions for optimal products.', 
+    {
+      title: 'Smart Material Selector',
+      description: 'Find the best building materials based on your requirements.',
       link: '/product-predictor',
-      icon: <Sparkles className="w-6 h-6 text-yellow-600 mb-2" />
+      icon: <SlidersHorizontal className="w-6 h-6 text-yellow-600 mb-2" />
     },
     { 
       title: 'EMI Calculator', 
