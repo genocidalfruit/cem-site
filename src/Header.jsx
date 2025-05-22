@@ -193,7 +193,9 @@ const Header = () => {
   };
  
   return (
-    <header className="bg-white border-b border-gray-100 fixed w-full z-50 top-0">
+    <header className={`fixed top-0 left-0 w-full z-50 bg-white transition-shadow duration-300 ${
+      isMenuOpen ? '' : 'drop-shadow-lg'
+    }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-5 flex justify-between items-center">
         <a href="/" className="z-50">
           <svg width="59" height="36" viewBox="0 0 59 36" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -249,10 +251,8 @@ const Header = () => {
         {/* Mobile Menu */}
         <div
           ref={menuRef}
-          className={`fixed inset-0 bg-white z-40 pt-20 px-6 transform transition-all duration-500 ease-in-out ${
-            isMenuOpen
-              ? 'translate-x-0 opacity-100'
-              : 'translate-x-full opacity-0'
+          className={`fixed inset-0 bg-white bg-opacity-100 z-40 pt-20 px-6 transform transition-transform duration-500 ease-in-out ${
+            isMenuOpen ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'
           } md:hidden`}
         >
           <div className="flex flex-col space-y-4">
