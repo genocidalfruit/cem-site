@@ -22,6 +22,16 @@ const EMICalculator = () => {
   const [interestRate, setInterestRate] = useState(10);
   const [loanTenure, setLoanTenure] = useState(10);
 
+  // Temporary state for sliders
+  const [tempLoanAmount, setTempLoanAmount] = useState(loanAmount);
+  const [tempInterestRate, setTempInterestRate] = useState(interestRate);
+  const [tempLoanTenure, setTempLoanTenure] = useState(loanTenure);
+
+  // Handlers to commit the values on slider release
+  const commitLoanAmount = () => setLoanAmount(tempLoanAmount);
+  const commitInterestRate = () => setInterestRate(tempInterestRate);
+  const commitLoanTenure = () => setLoanTenure(tempLoanTenure);
+
   const pieChartRef = useRef(null);
   const [emi, setEmi] = useState(0);
   const [totalInterest, setTotalInterest] = useState(0);
@@ -102,23 +112,72 @@ const EMICalculator = () => {
     <div className="flex flex-col min-h-screen text-gray-800 bg-gray-50">
       <Header />
       <div className="flex-grow w-full max-w-7xl mx-auto px-6 py-6 mt-24 border border-gray-300/50 rounded-md bg-gray-100/20 drop-shadow-xs mb-10">
-        <h1 className="text-5xl font-extrabold text-center mb-15">EMI Calculator</h1>
+        <h1 className="text-5xl font-extrabold text-center mb-13 mt-4">EMI Calculator</h1>
 
         {/* Sliders */}
         <section className="grid md:grid-cols-3 gap-6 mb-10">
-          {[
-            { icon: <IndianRupee className="inline w-5 h-5 mr-1" />, label: 'Loan Amount (₹ Lakhs)', value: loanAmount / 100000, min: 1, max: 100, onChange: val => setLoanAmount(val * 100000), suffix: 'Lakh' },
-            { icon: <Percent className="inline w-5 h-5 mr-1" />, label: 'Interest Rate (%)', value: interestRate, min: 1, max: 20, step: 0.1, onChange: setInterestRate, suffix: '%' },
-            { icon: <CalendarDays className="inline w-5 h-5 mr-1" />, label: 'Loan Tenure (Years)', value: loanTenure, min: 1, max: 30, onChange: setLoanTenure, suffix: 'Years' }
-          ].map(({ icon, label, value, min, max, step = 1, onChange, suffix }, i) => (
-            <div key={i} className="bg-white p-4 rounded-xl shadow-md">
-              <label className="block mb-2 font-semibold text-gray-700">
-                {icon} {label}
-              </label>
-              <input type="range" min={min} max={max} step={step} value={value} onChange={e => onChange(Number(e.target.value))} className="w-full accent-yellow-400" />
-              <div className="mt-2 text-center text-lg font-semibold">{value} {suffix}</div>
+          {/* Loan Amount Slider */}
+          <div className="bg-white p-4 rounded-xl shadow-md">
+            <label className="block mb-2 font-semibold text-gray-700">
+              <IndianRupee className="inline w-5 h-5 mr-1" /> Loan Amount (₹ Lakhs)
+            </label>
+            <input
+              type="range"
+              min={1}
+              max={100}
+              step={1}
+              value={tempLoanAmount / 100000}
+              onChange={(e) => setTempLoanAmount(Number(e.target.value) * 100000)}
+              onMouseUp={commitLoanAmount}
+              onTouchEnd={commitLoanAmount}
+              className="w-full accent-yellow-400"
+            />
+            <div className="mt-2 text-center text-lg font-semibold">
+              {tempLoanAmount / 100000} Lakh
             </div>
-          ))}
+          </div>
+
+          {/* Interest Rate Slider */}
+          <div className="bg-white p-4 rounded-xl shadow-md">
+            <label className="block mb-2 font-semibold text-gray-700">
+              <Percent className="inline w-5 h-5 mr-1" /> Interest Rate (%)
+            </label>
+            <input
+              type="range"
+              min={1}
+              max={20}
+              step={0.1}
+              value={tempInterestRate}
+              onChange={(e) => setTempInterestRate(Number(e.target.value))}
+              onMouseUp={commitInterestRate}
+              onTouchEnd={commitInterestRate}
+              className="w-full accent-yellow-400"
+            />
+            <div className="mt-2 text-center text-lg font-semibold">
+              {tempInterestRate}%
+            </div>
+          </div>
+
+          {/* Loan Tenure Slider */}
+          <div className="bg-white p-4 rounded-xl shadow-md">
+            <label className="block mb-2 font-semibold text-gray-700">
+              <CalendarDays className="inline w-5 h-5 mr-1" /> Loan Tenure (Years)
+            </label>
+            <input
+              type="range"
+              min={1}
+              max={30}
+              step={1}
+              value={tempLoanTenure}
+              onChange={(e) => setTempLoanTenure(Number(e.target.value))}
+              onMouseUp={commitLoanTenure}
+              onTouchEnd={commitLoanTenure}
+              className="w-full accent-yellow-400"
+            />
+            <div className="mt-2 text-center text-lg font-semibold">
+              {tempLoanTenure} Years
+            </div>
+          </div>
         </section>
 
         {/* EMI Summary */}
