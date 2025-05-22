@@ -1,12 +1,11 @@
-import { useEffect, useRef, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useState, useEffect, useRef } from 'react';
 import {
   Calculator,
   Banknote,
   Video,
   Bot,
   SlidersHorizontal,
-  MessageCircle,
+  MessageSquare,
   X
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -17,29 +16,9 @@ import Footer from './Footer.jsx';
 
 const FrontPage = () => {
   const [chatOpen, setChatOpen] = useState(false);
-  const [highlightChatButton, setHighlightChatButton] = useState(false);
-  const chatButtonRef = useRef(null);
-  const navigate = useNavigate();
-
-  // Inject Zapier script once
-  useEffect(() => {
-    const existingScript = document.querySelector('script[src*="zapier-interfaces"]');
-    if (!existingScript) {
-      const script = document.createElement('script');
-      script.src = 'https://interfaces.zapier.com/assets/web-components/zapier-interfaces/zapier-interfaces.esm.js';
-      script.type = 'module';
-      script.async = true;
-      document.body.appendChild(script);
-    }
-  }, []);
-
-  const handleChatFeatureClick = () => {
-    setChatOpen(true);
-    setHighlightChatButton(true);
-    chatButtonRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-
-    setTimeout(() => setHighlightChatButton(false), 2000);
-  };
+  const [pulse, setPulse] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 640);
+  const chatbotContainerRef = useRef(null);
 
   const features = [
     {
@@ -71,14 +50,67 @@ const FrontPage = () => {
       description: 'Ask questions and get real-time assistance.',
       link: '#',
       icon: <Bot className="w-6 h-6 text-yellow-600 mb-2" />,
-      onClick: handleChatFeatureClick
-    }
+      isChatbot: true
+    },
   ];
 
+  // Load Zapier script
+  useEffect(() => {
+    const scriptId = 'zapier-chatbot-script';
+    if (!document.getElementById(scriptId)) {
+      const script = document.createElement('script');
+      script.id = scriptId;
+      script.src = 'https://interfaces.zapier.com/assets/web-components/zapier-interfaces/zapier-interfaces.esm.js';
+      script.type = 'module';
+      script.async = true;
+      document.body.appendChild(script);
+    }
+  }, []);
+
+  // Resize handler to detect mobile
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 640);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // Prevent body scroll when chatbot is open on mobile
+  useEffect(() => {
+    if (chatOpen && isMobile) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+  }, [chatOpen, isMobile]);
+
+  // Render Zapier chatbot
+  useEffect(() => {
+    if (chatOpen && chatbotContainerRef.current) {
+      chatbotContainerRef.current.innerHTML = `
+        <zapier-interfaces-chatbot-embed
+          is-popup="false"
+          chatbot-id="cmaz54d1q008v10tgyakwjtrs"
+          style="width:100%;height:100%;display:block;"
+        ></zapier-interfaces-chatbot-embed>
+      `;
+    } else if (chatbotContainerRef.current) {
+      chatbotContainerRef.current.innerHTML = '';
+    }
+  }, [chatOpen]);
+
+  const handleChatbotClick = () => {
+    setPulse(true);
+    setChatOpen(true);
+    setTimeout(() => setPulse(false), 1500);
+  };
+
+  const closeChatbot = () => setChatOpen(false);
+
   return (
-    <div className="min-h-screen font-sans text-gray-800 bg-repeat flex flex-col">
+    <div className="min-h-screen font-sans text-gray-800 bg-repeat flex flex-col relative">
       <Header />
       <Carousel />
+
       <div className="text-center px-4 py-10 mt-9">
         <h1 className="text-4xl sm:text-5xl font-extrabold text-gray-800 mb-4">
           Welcome to <span className="text-yellow-600">Nirman Saathi</span>
@@ -87,65 +119,70 @@ const FrontPage = () => {
           Your trusted partner in building your dream home.
         </p>
       </div>
+
       <h2 className="text-3xl mt-8 font-bold text-center text-gray-800 mb-3">OUR FEATURES</h2>
 
-      <div className="border border-gray-100/20 p-10 mx-auto rounded-xl bg-gray-100 drop-shadow-xl mb-10 flex-grow max-w-7xl w-full">
-        <section className="px-6 flex flex-wrap justify-center gap-8">
+      <div className="border border-gray-100/20 p-4 sm:p-10 mx-auto rounded-xl bg-gray-100 drop-shadow-xl mb-10 flex-grow max-w-7xl w-full">
+        <section className="px-2 sm:px-6 flex flex-wrap justify-center gap-4 sm:gap-8">
           {features.map((item, idx) => (
-            <div
+            <button
               key={idx}
-              onClick={item.onClick ? item.onClick : () => navigate(item.link)}
-              className="cursor-pointer bg-white p-6 rounded-xl shadow hover:shadow-lg transition block hover:bg-yellow-50 w-full sm:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.5rem)] max-w-sm"
+              onClick={item.isChatbot ? handleChatbotClick : undefined}
+              className="bg-white text-left p-4 sm:p-6 rounded-xl shadow hover:shadow-lg transition block hover:bg-yellow-50 w-[95%] sm:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.5rem)] max-w-sm"
             >
               <div className="flex flex-col">
                 {item.icon}
                 <h3 className="text-xl font-bold text-yellow-600 mb-2">{item.title}</h3>
                 <p className="text-gray-700 text-sm">{item.description}</p>
               </div>
-            </div>
+            </button>
           ))}
         </section>
       </div>
 
       {/* Floating Chat Button */}
       <motion.button
-        ref={chatButtonRef}
-        onClick={() => setChatOpen(prev => !prev)}
-        className="fixed bottom-6 right-6 z-50 bg-yellow-600 hover:bg-yellow-700 text-white p-4 rounded-full shadow-xl"
-        aria-label="Toggle Chatbot"
-        animate={
-          highlightChatButton
-            ? { scale: [1, 1.3, 1] }
-            : { scale: 1 }
-        }
-        transition={{
-          duration: 0.6,
-          ease: 'easeInOut',
-        }}
-        onAnimationComplete={() => {
-          if (highlightChatButton) {
-            setHighlightChatButton(false);
-          }
-        }}
+        onClick={() => setChatOpen(!chatOpen)}
+        className="fixed bottom-6 right-6 z-50 bg-yellow-600 text-white rounded-full p-4 shadow-lg hover:bg-yellow-700"
+        initial={{ scale: 1 }}
+        animate={pulse ? { scale: [1, 1.4, 1] } : { scale: 1 }}
+        transition={{ duration: 0.6, ease: 'easeInOut' }}
       >
-        {chatOpen ? <X className="w-7 h-7" /> : <MessageCircle className="w-7 h-7" />}
+        <MessageSquare className="w-6 h-6" />
       </motion.button>
 
-      {/* Chatbot Embed (always mounted, hidden via CSS) */}
-      <motion.div
-        initial={false}
-        animate={{ opacity: chatOpen ? 1 : 0, y: chatOpen ? 0 : 30, pointerEvents: chatOpen ? 'auto' : 'none' }}
-        transition={{ duration: 0.3 }}
-        className="fixed bottom-24 right-6 z-40 w-[400px] h-[600px] overflow-hidden border border-gray-500/20 rounded-xl shadow-xl bg-white"
-        style={{ display: 'block' }}
-      >
-        <zapier-interfaces-chatbot-embed
-          is-popup="false"
-          chatbot-id="cmaz54d1q008v10tgyakwjtrs"
-          height="600px"
-          width="400px"
-        ></zapier-interfaces-chatbot-embed>
-      </motion.div>
+      {/* Chatbot Container */}
+      <AnimatePresence>
+        {chatOpen && (
+          <motion.div
+            key="chatbot"
+            className={`fixed z-[9999] overflow-hidden bg-white ${
+              isMobile
+                ? 'top-0 left-0 w-screen h-screen'
+                : 'bottom-[100px] right-6 w-[90vw] sm:w-[400px] h-[400px] sm:h-[500px] rounded-xl shadow-xl'
+            }`}
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 30 }}
+            transition={{ duration: 0.4 }}
+          >
+            {/* Close Button */}
+            <button
+              onClick={closeChatbot}
+              className="absolute top-3 right-3 z-50 p-2 bg-white rounded-full shadow-md hover:bg-gray-100"
+              aria-label="Close chatbot"
+            >
+              <X className="w-5 h-5 text-gray-800" />
+            </button>
+
+            {/* Embed Container */}
+            <div
+              ref={chatbotContainerRef}
+              className="w-full h-full"
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <Footer />
     </div>

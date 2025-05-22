@@ -61,83 +61,82 @@ const videos = {
  
 const InfoVideos = () => {
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
-      <Header />
-     
-      <main className="flex-grow container border border-gray-300/50 rounded-md drop-shadow-xs px-4 py-8 mt-25 mx-5 mb-6">
+<div className="min-h-screen flex flex-col bg-gray-50">
+<Header />
+<main className="flex-grow container border border-gray-300/50 rounded-md drop-shadow-xs px-3 sm:px-4 py-6 md:py-8 mt-20 md:mt-25 mx-2 sm:mx-4 md:mx-5 mb-6">
         {/* Myth-Busting Videos Section */}
-        <section className="mb-12">
-          <h2 className="text-3xl font-bold text-gray-800 mb-6 pb-2 border-b-2 border-yellow-500">
+<section className="mb-8 md:mb-12">
+<h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-4 md:mb-6 pb-2 border-b-2 border-yellow-500">
             Myth-Busting Videos on Home Building
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+</h2>
+<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
             {videos.mythBusting.map((video, index) => (
-              <div key={index} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-                <div className="aspect-w-16 aspect-h-9">
-                  <iframe
-                    className="w-full h-48"
+<div key={index} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+<div className="aspect-w-16 aspect-h-9">
+<iframe
+                    className="w-full h-40 sm:h-48"
                     src={video.url}
                     title={video.title}
                     frameBorder="0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowFullScreen
-                  ></iframe>
-                </div>
-                <div className="p-4">
-                  <h3 className="text-lg font-semibold text-gray-800 mb-2">{video.title}</h3>
-                  <p className="text-gray-600 text-sm mb-3">{video.description}</p>
-                  <a
+></iframe>
+</div>
+<div className="p-3 sm:p-4">
+<h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-1 sm:mb-2">{video.title}</h3>
+<p className="text-gray-600 text-xs sm:text-sm mb-2 sm:mb-3">{video.description}</p>
+<a
                     href={video.url.replace('embed/', 'watch?v=')}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-yellow-600 hover:text-yellow-700 text-sm font-medium"
-                  >
+                    className="text-yellow-600 hover:text-yellow-700 text-xs sm:text-sm font-medium"
+>
                     Watch on YouTube →
-                  </a>
-                </div>
-              </div>
+</a>
+</div>
+</div>
             ))}
-          </div>
-        </section>
+</div>
+</section>
  
         {/* Educational Videos Section */}
-        <section>
-          <h2 className="text-3xl font-bold text-gray-800 mb-6 pb-2 border-b-2 border-yellow-500">
+<section>
+<h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-4 md:mb-6 pb-2 border-b-2 border-yellow-500">
             Educational Videos on Budgeting and Best Practices
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+</h2>
+<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
             {videos.educational.map((video, index) => (
-              <div key={index} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-                <div className="aspect-w-16 aspect-h-9">
-                  <iframe
-                    className="w-full h-48"
+<div key={index} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+<div className="aspect-w-16 aspect-h-9">
+<iframe
+                    className="w-full h-40 sm:h-48"
                     src={video.url}
                     title={video.title}
                     frameBorder="0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowFullScreen
-                  ></iframe>
-                </div>
-                <div className="p-4">
-                  <h3 className="text-lg font-semibold text-gray-800 mb-2">{video.title}</h3>
-                  <p className="text-gray-600 text-sm mb-3">{video.description}</p>
-                  <a
+></iframe>
+</div>
+<div className="p-3 sm:p-4">
+<h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-1 sm:mb-2">{video.title}</h3>
+<p className="text-gray-600 text-xs sm:text-sm mb-2 sm:mb-3">{video.description}</p>
+<a
                     href={video.url.replace('embed/', 'watch?v=')}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-yellow-600 hover:text-yellow-700 text-sm font-medium"
-                  >
+                    className="text-yellow-600 hover:text-yellow-700 text-xs sm:text-sm font-medium"
+>
                     Watch on YouTube →
-                  </a>
-                </div>
-              </div>
+</a>
+</div>
+</div>
             ))}
-          </div>
-        </section>
-      </main>
+</div>
+</section>
+</main>
  
       <Footer />
-    </div>
+</div>
   );
 };
  
