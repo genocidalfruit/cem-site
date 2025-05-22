@@ -54,9 +54,9 @@ const TileCalculator = () => {
   return (
     <div className="min-h-screen flex flex-col font-sans text-gray-800 bg-white pt-6">
       <Header />
-      <div className="flex-grow">
+      <div className="flex-grow border border-gray-300/50 rounded-md bg-gray-100/20 drop-shadow-xs mt-20 p-8 m-10">
         {/* Form */}
-        <div className="max-w-5xl mx-auto bg-white mt-20 p-6 rounded-lg shadow border border-gray-200">
+        <div className="max-w-5xl mx-auto bg-white p-6 rounded-lg shadow border border-gray-200">
           <h2 className="text-2xl font-bold mb-6 text-gray-800">
             Find out exactly how many tiles you need
           </h2>

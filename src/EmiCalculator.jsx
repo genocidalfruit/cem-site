@@ -105,9 +105,10 @@ const EMICalculator = () => {
   return (
     <div className="min-h-screen flex flex-col font-sans text-gray-800 bg-white">
       <Header />
-      <div className="flex-grow">
-        <div className="mt-24 max-w-6xl mx-auto bg-gray-100 p-8 rounded-md shadow-md">
-          <h2 className="text-2xl font-bold mb-6">EMI Calculator for Home Loan</h2>
+      <div className="flex-grow bg-gray-100/20 border border-gray-300/50 rounded-md mx-25 my-8 py-10 mt-24 drop-shadow-xs">
+      <h1 className="text-center text-4xl tracking-wide pb-10 text-gray-800 font-extrabold">EMI Calculator</h1>
+        <div className="max-w-6xl mx-auto bg-gray-100 p-8 rounded-md shadow-md">
+          <h2 className="text-2xl font-bold mb-6">EMI Details</h2>
 
           <div className="grid md:grid-cols-3 gap-6">
             <div className="space-y-2">

@@ -273,8 +273,7 @@ const CostCalc = () => {
   return (
     <div className="bg-white min-h-screen font-sans text-gray-800 flex flex-col">
       <Header />
-      <div className='flex-grow'>
-      <div className='mt-20'></div>
+      <div className='flex-grow m-8 mt-23 border border-gray-300/50 rounded-md bg-gray-100/20 drop-shadow-xs'>
       <h1 className="text-center text-4xl tracking-wide pt-7 pb-10 text-gray-800 font-extrabold">Construction Cost Estimator</h1>
       <div className="flex flex-wrap justify-center gap-6 mb-10 px-6">
         <div>
@@ -433,7 +432,7 @@ const CostCalc = () => {
             </div>
           </div>
 
-          <div className='flex justify-center mt-6 p-6 bg-yellow-100 font-semibold text-yellow-800 gap-20 rounded-md shadow-inner'>
+          <div className='flex justify-center mt-6 p-6 bg-yellow-100 font-semibold text-yellow-800 gap-20 shadow-inner'>
             <div>Cost per sqfeet: ₹{costPerSqft.toLocaleString()}</div>
             <div>Total Amount: ₹{totalAmount.toLocaleString()}</div>
           </div>

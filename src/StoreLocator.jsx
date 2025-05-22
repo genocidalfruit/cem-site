@@ -29,9 +29,9 @@ const StoreLocator = () => {
     <div className="min-h-screen flex flex-col font-sans text-gray-800 bg-white">
       
       <Header />
-      <div className='flex-grow'>
+      <div className='flex-grow border border-gray-300/50 rounded-md bg-gray-100/20 drop-shadow-xs m-10 mt-28'>
       {/* Main Content */}
-      <main className="pt-32 px-6 max-w-5xl mx-auto text-center">
+      <main className="px-6 max-w-5xl mx-auto text-center mt-10">
         <h1 className="text-4xl font-extrabold mb-10">Building Material Suppliers Near Me</h1>
 
         <div className="flex flex-wrap justify-center gap-6 mb-10">
