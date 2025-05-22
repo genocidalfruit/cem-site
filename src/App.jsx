@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route} from 'react-router-dom'
 import CostCalc from './CostCalc.jsx'
 import FrontPage from './FrontPage.jsx'
 import StoreLocator from './StoreLocator.jsx'

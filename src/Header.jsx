@@ -193,8 +193,8 @@ const Header = () => {
   };
  
   return (
-    <header className="bg-white border-b border-gray-100 fixed w-full z-50 top-0">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex justify-between items-center">
+    <header className="bg-white border-b border-gray-100 fixed w-full z-50 top-0 drop-shadow-xs">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-5 flex justify-between items-center">
         <a href="/" className="z-50">
           <svg width="59" height="36" viewBox="0 0 59 36" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M20.0898 18C20.0898 19.1046 19.1944 20 18.0898 20C16.9853 20 16.0898 19.1046 16.0898 18C16.0898 16.8954 16.9853 16 18.0898 16C19.1944 16 20.0898 16.8954 20.0898 18Z" fill="black"></path>
