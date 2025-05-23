@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Header from './Header';
 import Footer from './Footer';
-import { Boxes, Tag, SlidersHorizontal } from 'lucide-react';
+import { Boxes, Tag, SlidersHorizontal, PackageSearch } from 'lucide-react';
  
 const products = [
   {
@@ -92,11 +92,19 @@ const ProductPredictor = () => {
   const allMaterials = getAllMaterials();
  
   return (
-    <div className="flex flex-col min-h-screen text-gray-800 bg-gray-50">
+    <div className="flex flex-col min-h-screen text-gray-800 bg-gray-50"
+    style={{
+        backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23a9a9a9' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+        backgroundRepeat: 'repeat',
+        backgroundSize: '40px 40px',
+      }}>
       <Header />
-      <div className="flex-grow mx-4 md:mx-15 p-4 md:p-10 mt-25 md:mt-24 border border-gray-300/50 rounded-md bg-gray-100/20 drop-shadow-xs mb-10">
-        <h1 className="text-3xl md:text-5xl font-extrabold text-center mb-6 md:mb-10 mt-2 md:mt-4">Product Predictor</h1>
- 
+      <div className="flex-grow border border-gray-300/50 rounded-md bg-gray-100/75 mt-28 mx-10 mb-10 shadow-2xl shadow-gray-600/50">
+        <h1 className="text-3xl md:text-5xl font-extrabold text-center flex items-center justify-center gap-3 mb-6 md:mb-10 border-b border-gray-300 py-10">
+          <PackageSearch className="w-7 h-7 md:w-9 md:h-9 text-blue-600 relative top-[2px]" />
+          Product Predictor
+        </h1>
+        <div className='mx-4 md:mx-15 p-4 md:p-10'>
         <div className="mb-6 md:mb-8">
           <label className="block text-base md:text-lg font-semibold text-gray-700 mb-2">
             <SlidersHorizontal className="inline w-4 h-4 md:w-5 md:h-5 mr-1" /> Budget (₹)
@@ -186,6 +194,7 @@ const ProductPredictor = () => {
             </div>
           ))}
         </div>
+      </div>
       </div>
       <Footer />
     </div>
