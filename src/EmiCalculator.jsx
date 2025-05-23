@@ -275,7 +275,7 @@ const EMICalculator = () => {
       }}>
       <Header />
       <div className="flex-grow w-full max-w-7xl mx-auto py-6 mt-25 md:mt-24 border-t border-gray-300/20 shadow-xl shadow-gray-600/50 rounded-md bg-gray-100/75 mb-10">
-        <h1 className="text-3xl md:text-5xl font-extrabold text-center flex items-center justify-center gap-3 mb-8 pb-10 md:mb-13 mt-2 md:mt-4 border-b border-gray-300/50">
+        <h1 className="text-3xl md:text-5xl font-extrabold text-center flex items-center justify-center gap-3 mt-2 md:mt-4 border-b border-gray-300/50">
           <Banknote className="w-7 h-7 md:w-9 md:h-9 text-yellow-600 relative top-[2px] mr-2" />
           EMI Calculator
         </h1>

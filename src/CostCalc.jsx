@@ -289,7 +289,12 @@ const CostCalc = () => {
   }, [resultsVisible]);
 
   return (
-    <div className="bg-white min-h-screen font-sans text-gray-800 flex flex-col">
+    <div className="bg-white min-h-screen font-sans text-gray-800 flex flex-col"
+    style={{
+        backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23a9a9a9' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+        backgroundRepeat: 'repeat',
+        backgroundSize: '40px 40px',
+      }}>
       <Header />
       
       <div className='flex-grow m-5 sm:m-4 md:m-8 mt-25 sm:mt-24 md:mt-28 border border-gray-300 rounded-md bg-gray-100 drop-shadow-xs'>
