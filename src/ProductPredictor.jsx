@@ -100,9 +100,9 @@ const ProductPredictor = () => {
       }}>
       <Header />
       <div className="flex-grow border border-gray-300/50 rounded-md bg-gray-100/75 mt-28 mx-10 mb-10 shadow-2xl shadow-gray-600/50">
-        <h1 className="text-3xl md:text-5xl font-extrabold text-center flex items-center justify-center gap-3 mb-6 md:mb-10 border-b border-gray-300 py-10">
-          <PackageSearch className="w-7 h-7 md:w-9 md:h-9 text-blue-600 relative top-[2px]" />
-          Product Predictor
+        <h1 className="text-xl xs:text-2xl sm:text-3xl md:text-5xl font-extrabold text-center flex flex-wrap sm:flex-nowrap items-center justify-center gap-x-3 gap-y-2 mb-6 md:mb-10 border-b border-gray-300 pb-6 sm:pb-10 mt-8 px-2">
+          <PackageSearch className="w-5 h-5 xs:w-6 xs:h-6 sm:w-7 sm:h-7 md:w-9 md:h-9 text-blue-600 relative top-[1px]" />
+          <span className="text-center">Product Predictor</span>
         </h1>
         <div className='mx-4 md:mx-15 p-4 md:p-10'>
         <div className="mb-6 md:mb-8">
