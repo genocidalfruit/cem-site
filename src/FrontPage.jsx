@@ -92,7 +92,7 @@ const FrontPage = () => {
         <zapier-interfaces-chatbot-embed
           is-popup="false"
           chatbot-id="cmaz54d1q008v10tgyakwjtrs"
-          style="width:100%;height:100%;display:block;"
+          style="width:100%;height:100%;display:block;box-sizing:border-box;overflow:hidden;"
         ></zapier-interfaces-chatbot-embed>
       `;
     } else if (chatbotContainerRef.current) {
