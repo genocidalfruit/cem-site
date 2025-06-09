@@ -203,8 +203,92 @@ const Header = () => {
         </div>
       </div>
 
-      {/* Mobile Menu (unchanged) */}
-      {/* ... rest of the mobile menu remains unchanged ... */}
+      {/* Mobile Menu */}
+      <div className={`lg:hidden overflow-hidden transition-all duration-500 ease-out ${
+        menuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+      }`}>
+        <div className="mt-6 bg-white/80 backdrop-blur-sm rounded-2xl border border-gray-200/50 overflow-hidden">
+          <div className="max-h-80 overflow-y-auto scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-yellow-300 hover:scrollbar-thumb-yellow-400">
+            <div className="p-4 space-y-2">
+              <a href="#" className="block p-3 text-gray-700 hover:text-yellow-600 hover:bg-yellow-50/80 rounded-xl transition-all duration-200 font-semibold">
+                Building Guide
+              </a>
+              <a href="#" className="block p-3 text-gray-700 hover:text-yellow-600 hover:bg-yellow-50/80 rounded-xl transition-all duration-200 font-semibold">
+                Products
+              </a>
+              <div className="pt-2 mt-3">
+                <button
+                  className="w-full flex items-center justify-between p-3 text-gray-700 hover:text-yellow-600 hover:bg-yellow-50/80 rounded-xl transition-all duration-200 font-semibold"
+                  onClick={() => setToolsOpen(!toolsOpen)}
+                >
+                  <span>Tools & Calculators</span>
+                  <ChevronDown size={16} className={`transform transition-transform duration-300 ${toolsOpen ? 'rotate-180' : ''}`} />
+                </button>
+                {toolsOpen && (
+                  <div className="pl-4 space-y-1 mt-2">
+                    {[
+                      { name: 'Cost Calculator', desc: 'Estimate project costs', link: '/cost-calculator' },
+                      { name: 'Product Predictor', desc: 'Smart recommendations', link: '/product-predictor' },
+                      { name: 'EMI Calculator', desc: 'Payment planning', link: '/emi-calculator' }
+                    ].map((tool) => (
+                      <a
+                        key={tool.name}
+                        href={tool.link}
+                        className="block p-2.5 hover:bg-yellow-50/60 rounded-lg transition-all duration-200"
+                      >
+                        <div className="font-medium text-gray-700 text-sm hover:text-yellow-600">
+                          {tool.name}
+                        </div>
+                        <div className="text-xs text-gray-500 mt-0.5">
+                          {tool.desc}
+                        </div>
+                      </a>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {isLoggedIn ? (
+                <div className="pt-3 mt-4 space-y-3">
+                  <div className="flex items-center gap-3 p-3 bg-gradient-to-r from-yellow-50 to-yellow-50/70 rounded-xl">
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-yellow-500 to-yellow-600 flex items-center justify-center text-white font-semibold shadow-sm">
+                      {getInitials(user.firstName, user.lastName)}
+                    </div>
+                    <div>
+                      <div className="font-semibold text-gray-800">
+                        {user.firstName} {user.lastName}
+                      </div>
+                      <div className="text-xs text-gray-500">{user.email}</div>
+                    </div>
+                  </div>
+                  <button
+                    onClick={handleLogout}
+                    className="w-full flex items-center justify-center gap-2 py-3 text-white bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
+                  >
+                    <LogOut size={16} />
+                    Sign Out
+                  </button>
+                </div>
+              ) : (
+                <div className="pt-3 mt-4 space-y-2">
+                  <button
+                    onClick={() => setShowLoginModal(true)}
+                    className="w-full py-3 text-gray-700 hover:text-yellow-600 hover:bg-yellow-50/80 rounded-xl font-semibold transition-all duration-300 border border-gray-200"
+                  >
+                    Log In
+                  </button>
+                  <button
+                    onClick={() => setShowSignupModal(true)}
+                    className="w-full bg-gradient-to-r from-yellow-500 to-yellow-600 text-white py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
+                  >
+                    Sign Up
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
 
       {/* Modals */}
       {showLoginModal && (
