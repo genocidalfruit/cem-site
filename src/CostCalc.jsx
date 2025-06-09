@@ -16,6 +16,17 @@ import {
   Grid2X2
 } from 'lucide-react';
 
+import {
+  FacebookShareButton,
+  TwitterShareButton,
+  WhatsappShareButton,
+  LinkedinShareButton,
+  FacebookIcon,
+  TwitterIcon,
+  WhatsappIcon,
+  LinkedinIcon,
+} from 'react-share';
+
 import Header from './Header';
 import Footer from './Footer';
 
@@ -533,27 +544,64 @@ const CostCalc = () => {
 
         {/* Share Modal */}
         {showShareModal && (
-          <div className="fixed inset-0 flex items-center justify-center z-50 p-2 sm:p-4">
-            <div className="absolute inset-0 bg-black bg-opacity-50 backdrop-blur-sm" onClick={toggleShareModal}></div>
-            <div className="bg-white rounded-xl sm:rounded-2xl p-3 sm:p-6 z-10 shadow-xl w-full max-w-xs">
-              <h3 className="text-base sm:text-xl font-bold text-gray-900 mb-3 sm:mb-6 text-center">Share Your Estimate</h3>
-              <div className="flex justify-center space-x-2 sm:space-x-4 mb-3 sm:mb-6">
-                <button className="p-2 bg-blue-100 rounded-full hover:bg-blue-200">
-                  <Share2 className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />
-                </button>
-                <button className="p-2 bg-green-100 rounded-full hover:bg-green-200">
-                  <Share2 className="w-4 h-4 sm:w-5 sm:h-5 text-green-600" />
-                </button>
-                <button className="p-2 bg-purple-100 rounded-full hover:bg-purple-200">
-                  <Share2 className="w-4 h-4 sm:w-5 sm:h-5 text-purple-600" />
+          <div className="fixed inset-0 flex items-center justify-center z-50 p-4 sm:p-6">
+            <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={toggleShareModal}></div>
+            <div className="bg-white rounded-xl sm:rounded-2xl p-6 z-10 shadow-xl w-full max-w-sm">
+              <div className="text-center">
+                <div className="p-4 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full w-14 h-14 mx-auto mb-4 flex items-center justify-center">
+                  <Share2 className="w-6 h-6 text-white" />
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-1">Share Your Estimate</h3>
+                <p className="text-sm text-gray-600 mb-6">Send your construction cost estimate</p>
+
+                <div className="bg-gray-50 rounded-xl p-4 mb-6">
+                  <div className="text-xs text-gray-600 mb-1">Estimate Summary</div>
+                  <div className="text-base font-bold text-gray-800">₹{totalAmount.toLocaleString()}</div>
+                  <div className="text-xs text-gray-600">
+                    {state}, {city} • {area} sq ft • ₹{costPerSqft.toLocaleString()}/sqft
+                  </div>
+                </div>
+
+                <div className="flex justify-center gap-3 mb-6">
+                  <FacebookShareButton
+                    url={window.location.href}
+                    quote={`Construction estimate: ₹${totalAmount.toLocaleString()} • ${area} sq ft @ ₹${costPerSqft}/sqft • ${city}, ${state}`}
+                    hashtag="#ConstructionEstimate"
+                  >
+                    <FacebookIcon size={40} round />
+                  </FacebookShareButton>
+
+                  <TwitterShareButton
+                    url={window.location.href}
+                    title={`Construction estimate: ₹${totalAmount.toLocaleString()} • ${area} sq ft @ ₹${costPerSqft}/sqft • ${city}, ${state}`}
+                  >
+                    <TwitterIcon size={40} round />
+                  </TwitterShareButton>
+
+                  <WhatsappShareButton
+                    url={window.location.href}
+                    title={`Construction estimate: ₹${totalAmount.toLocaleString()} • ${area} sq ft @ ₹${costPerSqft}/sqft • ${city}, ${state}`}
+                    separator=" - "
+                  >
+                    <WhatsappIcon size={40} round />
+                  </WhatsappShareButton>
+
+                  <LinkedinShareButton
+                    url={window.location.href}
+                    summary={`Detailed construction cost estimate: ₹${totalAmount.toLocaleString()} for ${area} sq ft at ₹${costPerSqft}/sqft in ${city}, ${state}`}
+                    source="Construction Cost Calculator"
+                  >
+                    <LinkedinIcon size={40} round />
+                  </LinkedinShareButton>
+                </div>
+
+                <button
+                  onClick={toggleShareModal}
+                  className="w-full py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-lg font-semibold text-sm"
+                >
+                  Close
                 </button>
               </div>
-              <button 
-                onClick={toggleShareModal}
-                className="w-full bg-gray-100 hover:bg-gray-200 text-gray-800 py-2 px-3 rounded-lg sm:rounded-xl font-semibold text-xs sm:text-base"
-              >
-                Close
-              </button>
             </div>
           </div>
         )}

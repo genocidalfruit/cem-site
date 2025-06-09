@@ -17,6 +17,17 @@ import {
   Sparkles
 } from 'lucide-react';
 
+import {
+  FacebookShareButton,
+  TwitterShareButton,
+  WhatsappShareButton,
+  LinkedinShareButton,
+  FacebookIcon,
+  TwitterIcon,
+  WhatsappIcon,
+  LinkedinIcon,
+} from 'react-share';
+
 import Header from './Header';
 import Footer from './Footer';
 
@@ -638,30 +649,59 @@ const EMICalculator = () => {
       {/* Enhanced Share Modal */}
       {showShareModal && (
         <div className="fixed inset-0 flex items-center justify-center z-50 p-4">
-          <div 
-            className="absolute inset-0 bg-black/60 backdrop-blur-sm" 
+          <div
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
             onClick={toggleShareModal}
           ></div>
-          <div className="bg-white/90 backdrop-blur-md rounded-3xl p-8 shadow-2xl border border-white/50 max-w-md w-full transform scale-100 animate-in">
+          <div className="bg-white/90 backdrop-blur-md rounded-3xl p-8 shadow-2xl border border-white/50 max-w-md w-full z-10 relative">
             <div className="text-center">
               <div className="p-4 bg-gradient-to-br from-blue-400 to-blue-600 rounded-2xl w-16 h-16 mx-auto mb-4 flex items-center justify-center">
                 <Share2 className="w-8 h-8 text-white" />
               </div>
               <h3 className="text-2xl font-bold text-gray-800 mb-2">Share Your Estimate</h3>
               <p className="text-gray-600 mb-6">Share your EMI calculation results</p>
-              
+
               <div className="bg-gray-50 rounded-2xl p-4 mb-6">
                 <div className="text-sm text-gray-600 mb-2">Your EMI Summary</div>
-                <div className="text-lg font-bold text-gray-800">₹{emi.toLocaleString()}/month</div>
+                <div className="text-lg font-bold text-gray-800">
+                  ₹{emi.toLocaleString()}/month
+                </div>
                 <div className="text-sm text-gray-600">
-                  ₹{(loanAmount/100000).toFixed(1)}L loan • {interestRate}% rate • {loanTenure} years
+                  ₹{(loanAmount / 100000).toFixed(1)}L loan • {interestRate}% rate • {loanTenure} years
                 </div>
               </div>
 
               <div className="flex justify-center gap-3 mb-6">
-                <button className="p-3 bg-blue-100 hover:bg-blue-200 rounded-2xl transition-colors group">
-                  <Share2 className="w-6 h-6 text-blue-600 group-hover:scale-110 transition-transform" />
-                </button>
+                <FacebookShareButton
+                  url={window.location.href}
+                  quote={`Check out this EMI: ₹${emi.toLocaleString()}/mo, ₹${(loanAmount / 100000).toFixed(1)}L, ${interestRate}%, ${loanTenure} years`}
+                  hashtag="#EMICalculator"
+                >
+                  <FacebookIcon size={40} round />
+                </FacebookShareButton>
+
+                <TwitterShareButton
+                  url={window.location.href}
+                  title={`Check this EMI: ₹${emi.toLocaleString()}/mo • ₹${(loanAmount / 100000).toFixed(1)}L @ ${interestRate}% for ${loanTenure} years`}
+                >
+                  <TwitterIcon size={40} round />
+                </TwitterShareButton>
+
+                <WhatsappShareButton
+                  url={window.location.href}
+                  title={`EMI: ₹${emi.toLocaleString()}/month • ₹${(loanAmount / 100000).toFixed(1)}L • ${interestRate}% • ${loanTenure} years`}
+                  separator=" - "
+                >
+                  <WhatsappIcon size={40} round />
+                </WhatsappShareButton>
+
+                <LinkedinShareButton
+                  url={window.location.href}
+                  summary={`Monthly EMI: ₹${emi.toLocaleString()} • ₹${(loanAmount / 100000).toFixed(1)}L loan • ${interestRate}% rate • ${loanTenure} years`}
+                  source="EMI Calculator"
+                >
+                  <LinkedinIcon size={40} round />
+                </LinkedinShareButton>
               </div>
 
               <button
