@@ -1,73 +1,152 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Boxes, Tag, SlidersHorizontal, PackageSearch, Filter, X, ChevronDown, Loader2, AlertCircle } from 'lucide-react';
 import Header from './Header';
 import Footer from './Footer';
-import { Boxes, Tag, SlidersHorizontal, PackageSearch, Filter, X, ChevronDown } from 'lucide-react';
 
-const products = [
-  {
-    name: 'JSW Neo Steel TMT Bars',
-    description: 'High strength and flexibility steel bars ideal for residential and commercial construction.',
-    price: 45000,
-    link: '/',
-    tags: ['Durable', 'High Strength', 'Eco Friendly'],
-    material: 'Steel',
-  },
-  {
-    name: 'JSW Coated Steel Sheets',
-    description: 'Zinc and color coated steel sheets perfect for roofing and cladding applications.',
-    price: 60000,
-    link: '/',
-    tags: ['Weather Resistant', 'Aesthetic', 'Eco Friendly'],
-    material: 'Steel',
-  },
-  {
-    name: 'JSW Cement (PSC)',
-    description: 'Portland Slag Cement known for better durability and long-lasting strength.',
-    price: 350,
-    link: '/',
-    tags: ['Eco Friendly', 'Cost Effective', 'Durable'],
-    material: 'Cement',
-  },
-  {
-    name: 'JSW Paints Aura',
-    description: 'Eco-conscious water-based paints with low VOC emissions.',
-    price: 2500,
-    link: '/',
-    tags: ['Eco Friendly', 'Low VOC', 'Premium Finish'],
-    material: 'Paint',
-  },
-  {
-    name: 'JSW Concreel HD Cement',
-    description: 'Specially formulated for high durability construction in aggressive environments.',
-    price: 380,
-    link: '/',
-    tags: ['Durable', 'High Strength', 'Cost Effective'],
-    material: 'Cement',
-  },
-];
+// API configuration - Fixed the URL to include protocol
+const API_BASE_URL = 'https://cem-site-api.onrender.com/api';
 
-const getAllTags = () => {
-  const tagSet = new Set();
-  products.forEach(product => {
-    product.tags.forEach(tag => tagSet.add(tag));
-  });
-  return [...tagSet];
-};
+// API service functions
+const apiService = {
+  async getProducts(filters = {}) {
+    try {
+      const params = new URLSearchParams();
+      
+      if (filters.budget) params.append('budget', filters.budget);
+      if (filters.tags && filters.tags.length > 0) {
+        filters.tags.forEach(tag => params.append('tags', tag));
+      }
+      if (filters.materials && filters.materials.length > 0) {
+        filters.materials.forEach(material => params.append('materials', material));
+      }
+      if (filters.page) params.append('page', filters.page);
+      if (filters.limit) params.append('limit', filters.limit);
 
-const getAllMaterials = () => {
-  const materials = new Set();
-  products.forEach(product => {
-    materials.add(product.material);
-  });
-  return [...materials];
+      const response = await fetch(`${API_BASE_URL}/products?${params}`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return await response.json();
+    } catch (error) {
+      console.error('Error fetching products:', error);
+      throw error;
+    }
+  },
+
+  async getTags() {
+    try {
+      const response = await fetch(`${API_BASE_URL}/products/tags`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const result = await response.json();
+      return result.data;
+    } catch (error) {
+      console.error('Error fetching tags:', error);
+      throw error;
+    }
+  },
+
+  async getMaterials() {
+    try {
+      const response = await fetch(`${API_BASE_URL}/products/materials`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const result = await response.json();
+      return result.data;
+    } catch (error) {
+      console.error('Error fetching materials:', error);
+      throw error;
+    }
+  }
 };
 
 const ProductPredictor = () => {
+  // State management
+  const [products, setProducts] = useState([]);
+  const [allTags, setAllTags] = useState([]);
+  const [allMaterials, setAllMaterials] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  
+  // Filter states
   const [budget, setBudget] = useState(60000);
   const [selectedTags, setSelectedTags] = useState([]);
   const [selectedMaterials, setSelectedMaterials] = useState([]);
   const [filtersExpanded, setFiltersExpanded] = useState(false);
 
+  // Pagination state
+  const [pagination, setPagination] = useState({
+    currentPage: 1,
+    totalPages: 1,
+    totalProducts: 0
+  });
+
+  // Fetch initial data
+  useEffect(() => {
+    const fetchInitialData = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+
+        // Fetch tags and materials in parallel
+        const [tagsData, materialsData] = await Promise.all([
+          apiService.getTags(),
+          apiService.getMaterials()
+        ]);
+
+        setAllTags(tagsData);
+        setAllMaterials(materialsData);
+
+        // Fetch initial products
+        const productsData = await apiService.getProducts({ budget, limit: 20 });
+        setProducts(productsData.data.products);
+        setPagination(productsData.data.pagination);
+
+      } catch (err) {
+        setError('Failed to load data. Please try again.');
+        console.error('Error fetching initial data:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchInitialData();
+  }, []);
+
+  // Fetch products when filters change
+  useEffect(() => {
+    const fetchFilteredProducts = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+
+        const filters = {
+          budget,
+          tags: selectedTags,
+          materials: selectedMaterials,
+          limit: 20
+        };
+
+        const productsData = await apiService.getProducts(filters);
+        setProducts(productsData.data.products);
+        setPagination(productsData.data.pagination);
+
+      } catch (err) {
+        setError('Failed to load products. Please try again.');
+        console.error('Error fetching filtered products:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    // Debounce the API call
+    const timeoutId = setTimeout(fetchFilteredProducts, 300);
+    return () => clearTimeout(timeoutId);
+  }, [budget, selectedTags, selectedMaterials]);
+
+  // Filter handlers
   const handleTagToggle = (tag) => {
     setSelectedTags(prev =>
       prev.includes(tag) ? prev.filter(t => t !== tag) : [...prev, tag]
@@ -86,23 +165,34 @@ const ProductPredictor = () => {
     setBudget(60000);
   };
 
-  const filteredProducts = products.filter(product => {
-    const matchesBudget = product.price <= budget;
-    const matchesTags =
-      selectedTags.length === 0 || selectedTags.every(tag => product.tags.includes(tag));
-    const matchesMaterial =
-      selectedMaterials.length === 0 || selectedMaterials.includes(product.material);
-    return matchesBudget && matchesTags && matchesMaterial;
-  });
-
-  const allTags = getAllTags();
-  const allMaterials = getAllMaterials();
   const activeFiltersCount = selectedTags.length + selectedMaterials.length;
+
+  // Error component
+  if (error && !loading) {
+    return (
+      <div className="flex flex-col min-h-screen bg-gray-100">
+        <div className="flex-grow flex items-center justify-center">
+          <div className="max-w-md mx-auto text-center p-8">
+            <div className="bg-red-100 rounded-full w-24 h-24 flex items-center justify-center mx-auto mb-6">
+              <AlertCircle className="w-12 h-12 text-red-500" />
+            </div>
+            <h3 className="text-xl font-semibold text-gray-800 mb-2">Something went wrong</h3>
+            <p className="text-gray-600 mb-6">{error}</p>
+            <button
+              onClick={() => window.location.reload()}
+              className="bg-blue-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-blue-700 transition-colors"
+            >
+              Try Again
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-100">
       <Header />
-      
       {/* Hero Section */}
       <div className="pt-10 pb-8 px-6">
         <div className="max-w-7xl mx-auto text-center">
@@ -246,16 +336,22 @@ const ProductPredictor = () => {
             <h2 className="text-2xl font-bold text-gray-800">
               Recommended Products
               <span className="ml-3 text-lg text-gray-500 font-normal">
-                ({filteredProducts.length} found)
+                ({pagination.totalProducts} found)
               </span>
             </h2>
+            {loading && (
+              <div className="flex items-center gap-2 text-blue-600">
+                <Loader2 className="w-5 h-5 animate-spin" />
+                <span className="text-sm font-medium">Loading...</span>
+              </div>
+            )}
           </div>
 
           {/* Products Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredProducts.map((product, index) => (
+            {products.map((product) => (
               <div 
-                key={index} 
+                key={product._id} 
                 className="group bg-white rounded-2xl shadow-lg border border-gray-200/50 overflow-hidden hover:shadow-2xl hover:-translate-y-1 transition-all duration-300"
               >
                 <div className="p-6 space-y-4">
@@ -288,15 +384,32 @@ const ProductPredictor = () => {
                     ))}
                   </div>
 
-                  <button className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white py-3 px-6 rounded-xl font-semibold hover:from-blue-700 hover:to-blue-800 transition-all duration-200 transform hover:scale-[1.02] shadow-lg hover:shadow-xl">
-                    View Product Details
-                  </button>
+                  {/* Modified Button to Link */}
+                  {product.url && ( // Only render the link if a URL exists
+                    <a
+                      href={product.url}
+                      target="_blank" // Opens in a new tab
+                      rel="noopener noreferrer" // Security best practice for target="_blank"
+                      className="w-full block text-center bg-gradient-to-r from-blue-600 to-blue-700 text-white py-3 px-6 rounded-xl font-semibold hover:from-blue-700 hover:to-blue-800 transition-all duration-200 transform hover:scale-[1.02] shadow-lg hover:shadow-xl"
+                    >
+                      View Product Details
+                    </a>
+                  )}
+                  {!product.url && ( // Show a disabled button or alternative if no URL
+                    <button
+                      disabled
+                      className="w-full bg-gray-400 text-white py-3 px-6 rounded-xl font-semibold cursor-not-allowed"
+                    >
+                      Details Not Available
+                    </button>
+                  )}
                 </div>
               </div>
             ))}
           </div>
 
-          {filteredProducts.length === 0 && (
+          {/* No Products Found */}
+          {!loading && products.length === 0 && (
             <div className="text-center py-16">
               <div className="max-w-md mx-auto">
                 <div className="bg-gray-100 rounded-full w-24 h-24 flex items-center justify-center mx-auto mb-6">
@@ -315,9 +428,23 @@ const ProductPredictor = () => {
               </div>
             </div>
           )}
+
+          {/* Loading State */}
+          {loading && products.length === 0 && (
+            <div className="text-center py-16">
+              <div className="max-w-md mx-auto">
+                <div className="bg-blue-100 rounded-full w-24 h-24 flex items-center justify-center mx-auto mb-6">
+                  <Loader2 className="w-12 h-12 text-blue-600 animate-spin" />
+                </div>
+                <h3 className="text-xl font-semibold text-gray-800 mb-2">Loading products...</h3>
+                <p className="text-gray-600">
+                  Please wait while we fetch the latest products for you
+                </p>
+              </div>
+            </div>
+          )}
         </div>
       </div>
-
       <Footer />
     </div>
   );
